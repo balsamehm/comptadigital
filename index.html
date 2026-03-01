@@ -44,7 +44,7 @@
             overflow: hidden;
         }
 
-        /* SIDEBAR (BARRE LATÉRALE) */
+        /* SIDEBAR */
         .sidebar {
             width: 260px;
             background: var(--bg-sidebar);
@@ -91,7 +91,7 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        /* SIGNATURE DÉVELOPPEUR */
+        /* SIGNATURE */
         .signature {
             margin-top: auto;
             padding-top: 20px;
@@ -138,12 +138,6 @@
             transition: 0.2s;
         }
 
-        .theme-btn:hover {
-            transform: translateY(-1px);
-            background: var(--accent);
-        }
-
-        /* COMPOSANTS UI */
         .card {
             background: var(--bg-card);
             border-radius: 16px;
@@ -173,7 +167,6 @@
             border-radius: 2px;
         }
 
-        /* FORMULAIRES */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -200,13 +193,6 @@
             font-family: inherit;
             font-size: 0.9rem;
             box-sizing: border-box;
-            transition: 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         .btn-submit {
@@ -222,12 +208,6 @@
             transition: 0.3s;
         }
 
-        .btn-submit:hover {
-            filter: brightness(1.1);
-            transform: translateY(-1px);
-        }
-
-        /* STATISTIQUES EN COULEURS */
         .stat-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -257,40 +237,16 @@
             height: 100%;
             width: 0%;
             background: var(--primary);
-            transition: 1s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 1s;
         }
 
-        /* TABLEAUX & HISTORIQUE */
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 500px;
-        }
-
-        th {
-            text-align: left;
-            padding: 15px;
-            border-bottom: 2px solid var(--border);
-            color: var(--text-muted);
-            font-size: 0.65rem;
-            text-transform: uppercase;
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.85rem;
-        }
-
+        .table-container { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        th { text-align: left; padding: 15px; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.65rem; text-transform: uppercase; }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
         .val-debit { color: var(--success); font-weight: 700; text-align: right; }
         .val-credit { color: var(--danger); font-weight: 700; text-align: right; }
 
-        /* GESTION DES PAGES */
         .page { display: none; }
         .page.active { display: block; animation: fadeInUp 0.4s ease forwards; }
 
@@ -299,39 +255,16 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- RESPONSIVE MOBILE --- */
+        /* RESPONSIVE */
         @media (max-width: 850px) {
             body { flex-direction: column; overflow-y: auto; height: auto; }
-            .sidebar {
-                width: 100%;
-                padding: 20px;
-                height: auto;
-                position: sticky;
-                top: 0;
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-            }
+            .sidebar { width: 100%; padding: 20px; height: auto; position: sticky; top: 0; border-right: none; border-bottom: 1px solid var(--border); }
             .sidebar h1 { margin-bottom: 15px; font-size: 0.8rem; border: none; padding: 0; }
-            .nav-container {
-                display: flex;
-                overflow-x: auto;
-                gap: 10px;
-                padding-bottom: 5px;
-            }
-            .nav-item {
-                margin-bottom: 0;
-                white-space: nowrap;
-                padding: 10px 15px;
-                font-size: 0.75rem;
-            }
+            .nav-container { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 5px; }
+            .nav-item { margin-bottom: 0; white-space: nowrap; padding: 10px 15px; font-size: 0.75rem; }
             .signature { display: none; }
             .main-content { padding: 25px; margin-left: 0; width: 100%; box-sizing: border-box; }
             .stat-grid { grid-template-columns: 1fr 1fr; }
-        }
-
-        @media (max-width: 480px) {
-            .stat-grid { grid-template-columns: 1fr; }
-            .form-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -345,76 +278,68 @@
             <div class="nav-item" onclick="showPage('stats', this)">Statistiques</div>
             <div class="nav-item" onclick="showPage('save', this)">Sauvegarde</div>
         </div>
-
-        <div class="signature">
-            Développé par
-            <span>BALSAME HAMMIOUI</span>
-        </div>
+        <div class="signature">Développé par <span>BALSAME HAMMIOUI</span></div>
     </div>
 
     <div class="main-content">
-        
         <div class="header-tools">
-            <button class="theme-btn" onclick="toggleTheme()">🌓 Mode Sombre / Clair</button>
+            <button class="theme-btn" onclick="toggleTheme()">Mode Sombre / Clair</button>
         </div>
 
         <div id="saisie" class="page active">
             <div class="card">
-                <div class="title">Nouvelle Écriture Comptable</div>
+                <div class="title">Nouvelle Ecriture Comptable</div>
                 <div class="form-grid">
                     <div>
                         <label>Compte (Nature)</label>
                         <select id="type">
                             <option value="6111">Achat de Marchandises (6111)</option>
                             <option value="7111">Vente de Marchandises (7111)</option>
-                            <option value="6141">Services Extérieurs (6141)</option>
-                            <option value="6121">Achats de Matières (6121)</option>
+                            <option value="6141">Services Exterieurs (6141)</option>
                         </select>
                     </div>
                     <div>
                         <label>Montant HT (MAD)</label>
-                        <input type="number" id="ht" placeholder="0.00" step="0.01">
+                        <input type="number" id="ht" placeholder="0.00">
                     </div>
                     <div>
-                        <label>Référence / Libellé</label>
-                        <input type="text" id="libelle" placeholder="Ex: FACT_092026">
+                        <label>Reference</label>
+                        <input type="text" id="libelle" placeholder="Ex: FACT_001">
                     </div>
                     <div>
-                        <label>Mode de Règlement</label>
+                        <label>Reglement</label>
                         <select id="reglement">
-                            <option value="5141">Banque (Virement/Chèque)</option>
-                            <option value="5161">Caisse (Espèces)</option>
-                            <option value="4411">Fournisseurs (Crédit)</option>
-                            <option value="3421">Clients (Crédit)</option>
+                            <option value="5141">Banque</option>
+                            <option value="5161">Caisse</option>
+                            <option value="4411">Fournisseur</option>
                         </select>
                     </div>
                 </div>
-                <button class="btn-submit" onclick="ajouterAuJournal()">Enregistrer l'opération</button>
+                <button class="btn-submit" onclick="ajouterAuJournal()">Enregistrer l'operation</button>
             </div>
 
             <div class="card">
-                <div class="title">Historique des Opérations</div>
+                <div class="title">Historique des Operations</div>
                 <div id="journal-output" class="table-container">
-                    <p style="text-align: center; color: var(--text-muted); padding: 20px;">Aucune écriture pour le moment.</p>
+                    <p style="text-align: center; color: var(--text-muted); padding: 20px;">Aucune ecriture enregistree.</p>
                 </div>
             </div>
         </div>
 
         <div id="pcm" class="page">
             <div class="card">
-                <div class="title">Plan Comptable Marocain (Extraits)</div>
+                <div class="title">Plan Comptable Marocain</div>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>Code</th><th>Intitulé du Compte</th><th>Cycle / Nature</th></tr>
+                            <tr><th>Code</th><th>Intitule</th><th>Nature</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>1111</td><td>Capital Social</td><td>Financement Permanent</td></tr>
-                            <tr><td>3421</td><td>Clients</td><td>Actif Circulant</td></tr>
-                            <tr><td>4411</td><td>Fournisseurs</td><td>Passif Circulant</td></tr>
-                            <tr><td>5141</td><td>Banque</td><td>Trésorerie Actif</td></tr>
-                            <tr><td>6111</td><td>Achats de Marchandises</td><td>Charges d'Exploitation</td></tr>
-                            <tr><td>7111</td><td>Ventes de Marchandises</td><td>Produits d'Exploitation</td></tr>
+                            <tr><td>1111</td><td>Capital Social</td><td>Financement</td></tr>
+                            <tr><td>3421</td><td>Clients</td><td>Actif</td></tr>
+                            <tr><td>4411</td><td>Fournisseurs</td><td>Passif</td></tr>
+                            <tr><td>6111</td><td>Achats</td><td>Charges</td></tr>
+                            <tr><td>7111</td><td>Ventes</td><td>Produits</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -423,26 +348,25 @@
 
         <div id="stats" class="page">
             <div class="card">
-                <div class="title">Analyse des Résultats</div>
+                <div class="title">Analyse Financiere</div>
                 <div class="stat-grid">
                     <div class="stat-item" style="border-top: 4px solid var(--danger);">
-                        <div class="stat-label">Total Charges (6xxx)</div>
+                        <div class="stat-label">Total Charges</div>
                         <div id="totalCharges" class="stat-value" style="color:var(--danger)">0.00 MAD</div>
                     </div>
                     <div class="stat-item" style="border-top: 4px solid var(--success);">
-                        <div class="stat-label">Total Produits (7xxx)</div>
+                        <div class="stat-label">Total Produits</div>
                         <div id="totalProduits" class="stat-value" style="color:var(--success)">0.00 MAD</div>
                     </div>
                 </div>
                 <div class="stat-item" style="margin-top:20px; border-top: 4px solid var(--primary); background: var(--accent);">
-                    <div class="stat-label">Résultat Net (Bénéfice / Perte)</div>
+                    <div class="stat-label">Resultat Net</div>
                     <div id="resultatNet" class="stat-value">0.00 MAD</div>
                 </div>
             </div>
-
             <div class="card">
-                <div class="title">Point Mort & Rentabilité</div>
-                <p id="rentableMsg" style="font-size: 0.85rem; color: var(--text-muted);">En attente de données...</p>
+                <div class="title">Seuil de Rentabilite</div>
+                <p id="rentableMsg" style="font-size: 0.85rem; color: var(--text-muted);">En attente de donnees...</p>
                 <div class="rentable-bar">
                     <div id="rentableFill" class="rentable-fill"></div>
                 </div>
@@ -451,162 +375,74 @@
 
         <div id="save" class="page">
             <div class="card">
-                <div class="title">Gestion des Données</div>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 25px;">
-                    Les données sont stockées localement dans votre navigateur. Pensez à sauvegarder avant de fermer.
-                </p>
+                <div class="title">Gestion des Donnees</div>
                 <div style="display: flex; gap: 15px; flex-direction: column;">
-                    <button class="btn-submit" onclick="saveLocal()">💾 Sauvegarder la session actuelle</button>
-                    <button class="btn-submit" style="background:#64748b" onclick="loadLocal()">📂 Restaurer la dernière sauvegarde</button>
-                    <button class="btn-submit" style="background:#94a3b8" onclick="resetApp()">🗑️ Réinitialiser tout</button>
+                    <button class="btn-submit" onclick="saveLocal()">Sauvegarder la session</button>
+                    <button class="btn-submit" style="background:#64748b" onclick="loadLocal()">Restaurer la sauvegarde</button>
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
-        // LOGIQUE JAVASCRIPT
-        let charges = 0;
-        let produits = 0;
-
-        // Changement de thème
+        let charges = 0, produits = 0;
         function toggleTheme() {
-            const body = document.body;
-            const currentTheme = body.getAttribute('data-theme');
-            body.setAttribute('data-theme', currentTheme === 'light' ? 'dark' : 'light');
+            const b = document.body;
+            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
         }
-
-        // Navigation entre les pages
-        function showPage(pageId, element) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
-            document.getElementById(pageId).classList.add('active');
-            element.classList.add('active');
+        function showPage(p, el) {
+            document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+            document.getElementById(p).classList.add('active');
+            el.classList.add('active');
         }
-
-        // Ajouter une écriture au journal
         function ajouterAuJournal() {
             const ht = parseFloat(document.getElementById('ht').value);
             const code = document.getElementById('type').value;
-            const lib = (document.getElementById('libelle').value || "OPÉRATION SANS LIBELLÉ").toUpperCase();
+            const lib = (document.getElementById('libelle').value || "SANS LIBELLE").toUpperCase();
             const reg = document.getElementById('reglement').value;
-
-            if (isNaN(ht) || ht <= 0) {
-                alert("Veuillez entrer un montant HT valide.");
-                return;
-            }
-
-            // Calculs comptables
-            const tva = ht * 0.20;
-            const ttc = ht + tva;
-
-            if (code.startsWith('6')) {
-                charges += ht;
-            } else if (code.startsWith('7')) {
-                produits += ht;
-            }
-
+            if (isNaN(ht) || ht <= 0) return alert("Montant invalide");
+            const tva = ht * 0.20; const ttc = ht + tva;
+            if (code.startsWith('6')) charges += ht; else produits += ht;
             updateUI();
-
-            // Création du tableau d'écriture (Style Journal)
-            const entryHtml = `
-            <table style="margin-bottom: 30px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--bg-card);">
-                <thead>
-                    <tr style="background: var(--accent);">
-                        <th colspan="2">DATE: ${new Date().toLocaleDateString()} | REF: ${lib}</th>
-                        <th style="text-align:right">DÉBIT</th>
-                        <th style="text-align:right">CRÉDIT</th>
-                    </tr>
-                </thead>
+            const entry = `
+            <table style="margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                <thead><tr style="background: var(--accent);"><th colspan="2">REF: ${lib}</th><th style="text-align:right">DEBIT</th><th style="text-align:right">CREDIT</th></tr></thead>
                 <tbody>
-                    <tr>
-                        <td style="width: 80px; font-weight:700">${code}</td>
-                        <td>Compte Principal (HT)</td>
-                        <td class="val-debit">${ht.toFixed(2)}</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:700">3455</td>
-                        <td>État - TVA Récupérable</td>
-                        <td class="val-debit">${tva.toFixed(2)}</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight:700">${reg}</td>
-                        <td>Contrepartie (TTC)</td>
-                        <td></td>
-                        <td class="val-credit">${ttc.toFixed(2)}</td>
-                    </tr>
+                    <tr><td>${code}</td><td>Principal HT</td><td class="val-debit">${ht.toFixed(2)}</td><td></td></tr>
+                    <tr><td>3455</td><td>TVA Recup.</td><td class="val-debit">${tva.toFixed(2)}</td><td></td></tr>
+                    <tr><td>${reg}</td><td>Contrepartie</td><td></td><td class="val-credit">${ttc.toFixed(2)}</td></tr>
                 </tbody>
             </table>`;
-
-            const output = document.getElementById('journal-output');
-            if (output.innerHTML.includes("Aucune écriture")) output.innerHTML = "";
-            output.innerHTML = entryHtml + output.innerHTML;
-
-            // Reset formulaire
-            document.getElementById('ht').value = "";
-            document.getElementById('libelle').value = "";
+            const out = document.getElementById('journal-output');
+            if (out.innerHTML.includes("Aucune")) out.innerHTML = "";
+            out.innerHTML = entry + out.innerHTML;
+            document.getElementById('ht').value = ""; document.getElementById('libelle').value = "";
         }
-
-        // Mise à jour des statistiques
         function updateUI() {
-            const resultat = produits - charges;
-            
-            document.getElementById('totalCharges').innerText = charges.toLocaleString() + " MAD";
-            document.getElementById('totalProduits').innerText = produits.toLocaleString() + " MAD";
-            
-            const resEl = document.getElementById('resultatNet');
-            resEl.innerText = resultat.toLocaleString() + " MAD";
-            resEl.style.color = resultat >= 0 ? "var(--success)" : "var(--danger)";
-
-            // Barre de rentabilité
+            const res = produits - charges;
+            document.getElementById('totalCharges').innerText = charges.toFixed(2) + " MAD";
+            document.getElementById('totalProduits').innerText = produits.toFixed(2) + " MAD";
+            const rEl = document.getElementById('resultatNet');
+            rEl.innerText = res.toFixed(2) + " MAD";
+            rEl.style.color = res >= 0 ? "var(--success)" : "var(--danger)";
             const ratio = charges > 0 ? Math.min((produits / charges) * 100, 100) : 0;
-            const fill = document.getElementById('rentableFill');
-            const msg = document.getElementById('rentableMsg');
-            
-            fill.style.width = ratio + "%";
-            fill.style.background = ratio >= 100 ? "var(--success)" : "var(--primary)";
-            
-            if (ratio >= 100) {
-                msg.innerText = "Point mort atteint. Votre activité dégage un bénéfice !";
-                msg.style.color = "var(--success)";
-            } else {
-                msg.innerText = "Couverture des charges : " + Math.round(ratio) + "% du seuil de rentabilité.";
-                msg.style.color = "var(--text-muted)";
-            }
+            document.getElementById('rentableFill').style.width = ratio + "%";
+            document.getElementById('rentableMsg').innerText = ratio >= 100 ? "Bénéfice atteint" : "Couverture : " + Math.round(ratio) + "%";
         }
-
-        // SAUVEGARDE LOCALE
         function saveLocal() {
-            localStorage.setItem('journal_data', document.getElementById('journal-output').innerHTML);
-            localStorage.setItem('charges_data', charges);
-            localStorage.setItem('produits_data', produits);
-            alert("✅ Données sauvegardées dans votre navigateur.");
+            localStorage.setItem('j_dat', document.getElementById('journal-output').innerHTML);
+            localStorage.setItem('c_dat', charges); localStorage.setItem('p_dat', produits);
+            alert("Session sauvegardée");
         }
-
         function loadLocal() {
-            const j = localStorage.getItem('journal_data');
-            const c = localStorage.getItem('charges_data');
-            const p = localStorage.getItem('produits_data');
-
+            const j = localStorage.getItem('j_dat');
             if (j) {
                 document.getElementById('journal-output').innerHTML = j;
-                charges = parseFloat(c) || 0;
-                produits = parseFloat(p) || 0;
+                charges = parseFloat(localStorage.getItem('c_dat')) || 0;
+                produits = parseFloat(localStorage.getItem('p_dat')) || 0;
                 updateUI();
-                alert("📂 Sauvegarde restaurée avec succès.");
-            } else {
-                alert("❌ Aucune sauvegarde trouvée.");
-            }
-        }
-
-        function resetApp() {
-            if(confirm("Voulez-vous vraiment tout effacer ? Cette action est irréversible.")) {
-                localStorage.clear();
-                location.reload();
+                alert("Données restaurées");
             }
         }
     </script>
