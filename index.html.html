@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComptaDigital | Balsame Hammioui</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-body: #f1f5f9; 
+            --bg-sidebar: #0f172a; 
+            --bg-card: #ffffff;
+            --text-main: #1e293b; 
+            --text-muted: #64748b; 
+            --primary: #2563eb;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        /* Mode Sombre */
+        [data-theme="dark"] {
+            --bg-body: #020617;
+            --bg-sidebar: #000000;
+            --bg-card: #0f172a;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0; 
+            display: flex; 
+            height: 100vh;
+            background: var(--bg-body); 
+            color: var(--text-main);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar {
+            width: 260px; 
+            padding: 40px 20px;
+            background: var(--bg-sidebar); 
+            color: white;
+            display: flex; 
+            flex-direction: column;
+            border-right: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .sidebar h1 {
+            font-size: 0.9rem; 
+            color: var(--primary);
+            font-weight: 600; 
+            margin-bottom: 40px;
+            text-align: center; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            padding: 14px 18px; 
+            border-radius: 7px;
+            margin-bottom: 10px; 
+            cursor: pointer;
+            color: #b0bbca;
+            font-size: 0.85rem;
+            transition: all 0.25s;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.07); 
+            color: white;
+        }
+
+        .nav-item.active {
+            background: var(--primary); 
+            color: white;
+            font-weight: 600;
+        }
+
+        .signature {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+
+        .signature span {
+            display: block;
+            color: white;
+            font-weight: 600;
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            height: 100vh;
+            padding: 40px 60px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px; 
+            border: 1px solid var(--border);
+            padding: 30px; 
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .title {
+            font-weight: 600; 
+            font-size: 0.9rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px; 
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+            gap: 20px; 
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 0.7rem; 
+            text-transform: uppercase; 
+            font-weight: 700; 
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input, select {
+            background: var(--bg-body); 
+            padding: 12px;
+            border: 1px solid var(--border); 
+            border-radius: 6px;
+            width: 100%; 
+            font-size: 0.9rem;
+            color: var(--text-main);
+            box-sizing: border-box;
+        }
+
+        .btn-submit {
+            background: var(--primary); 
+            color: white;
+            border: none; 
+            padding: 14px; 
+            width: 100%;
+            border-radius: 7px; 
+            cursor: pointer; 
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .btn-submit:hover { opacity: 0.9; }
+
+        /* Stats Cards Style */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            padding: 20px;
+            border-radius: 10px;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+        }
+
+        .stat-value { font-size: 1.4rem; font-weight: 700; margin-top: 10px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align:left; padding:12px; border-bottom:2px solid var(--border); color:var(--text-muted); font-size:0.65rem; text-transform: uppercase; }
+        td { padding:12px; border-bottom:1px solid var(--border); font-size:0.85rem; }
+        .val-pos { color:var(--success); font-weight:600; text-align:right; }
+        .val-neg { color:var(--danger); font-weight:600; text-align:right; }
+
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+
+<body data-theme="light">
+
+<div class="sidebar">
+    <h1>COMPTADIGITAL</h1>
+
+    <div class="nav-item active" onclick="showPage('saisie', this)">Saisie Journal</div>
+    <div class="nav-item" onclick="showPage('pcm', this)">Plan Comptable</div>
+    <div class="nav-item" onclick="showPage('stats', this)">Statistiques</div>
+    <div class="nav-item" onclick="showPage('export', this)">Sauvegarde</div>
+
+    <div class="signature">
+        Développé par
+        <span>BALSAME HAMMIOUI</span>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="header-top">
+        <button class="theme-toggle" onclick="toggleTheme()">Changer de mode</button>
+    </div>
+
+    <div id="saisie" class="page active">
+        <div class="card">
+            <div class="title">Nouvelle opération</div>
+            <div class="form-grid">
+                <div>
+                    <label>Nature</label>
+                    <select id="type">
+                        <option value="6111">Achat (6111)</option>
+                        <option value="7111">Vente (7111)</option>
+                        <option value="6141">Service (6141)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Montant HT (MAD)</label>
+                    <input type="number" id="ht" placeholder="0.00">
+                </div>
+                <div>
+                    <label>Référence</label>
+                    <input type="text" id="libelle" placeholder="REF001">
+                </div>
+                <div>
+                    <label>Règlement</label>
+                    <select id="reglement">
+                        <option value="4411">Crédit</option>
+                        <option value="5141">Banque</option>
+                        <option value="5161">Caisse</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn-submit" onclick="ajouterAuJournal()">Enregistrer au Journal</button>
+        </div>
+
+        <div class="card">
+            <div class="title">Historique des écritures</div>
+            <div id="journal-output" style="color:var(--text-muted)">Aucune écriture enregistrée.</div>
+        </div>
+    </div>
+
+    <div id="pcm" class="page">
+        <div class="card">
+            <div class="title">Référentiel PCM</div>
+            <table>
+                <thead>
+                    <tr><th>Code</th><th>Intitulé</th><th>Famille</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1111</td><td>Capital Social</td><td>Fonds propres</td></tr>
+                    <tr><td>3421</td><td>Clients</td><td>Actif circulant</td></tr>
+                    <tr><td>4411</td><td>Fournisseurs</td><td>Passif circulant</td></tr>
+                    <tr><td>5141</td><td>Banque</td><td>Trésorerie</td></tr>
+                    <tr><td>6111</td><td>Achats</td><td>Charges</td></tr>
+                    <tr><td>7111</td><td>Ventes</td><td>Produits</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="stats" class="page">
+        <div class="card">
+            <div class="title">Tableau de bord financier</div>
+            <div class="stat-grid">
+                <div class="stat-item" style="border-left: 4px solid var(--danger);">
+                    <label>Charges</label>
+                    <div id="totalCharges" class="stat-value" style="color:var(--danger);">0 MAD</div>
+                </div>
+                <div class="stat-item" style="border-left: 4px solid var(--success);">
+                    <label>Produits</label>
+                    <div id="totalProduits" class="stat-value" style="color:var(--success);">0 MAD</div>
+                </div>
+                <div class="stat-item" style="border-left: 4px solid var(--primary);">
+                    <label>Résultat Net</label>
+                    <div id="resultatNet" class="stat-value">0 MAD</div>
+                </div>
+                <div class="stat-item">
+                    <label>Marge brute</label>
+                    <div id="marge" class="stat-value" style="color:var(--primary)">0%</div>
+                </div>
+                <div class="stat-item">
+                    <label>TVA Collectée</label>
+                    <div id="tvaTotal" class="stat-value">0 MAD</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="export" class="page">
+        <div class="card">
+            <div class="title">Gestion de la base de données</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+                Utilisez ces options pour conserver vos données localement sur votre navigateur.
+            </p>
+            <div style="display: flex; gap: 15px;">
+                <button class="btn-submit" onclick="saveLocal()">Sauvegarder la session</button>
+                <button class="btn-submit" style="background:#64748b" onclick="loadLocal()">Restaurer les données</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+let charges = 0, produits = 0, tvaGlobal = 0;
+
+function toggleTheme() {
+    const body = document.body;
+    const current = body.getAttribute('data-theme');
+    body.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+}
+
+function showPage(id, el) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    el.classList.add("active");
+}
+
+function ajouterAuJournal() {
+    const ht = parseFloat(document.getElementById("ht").value);
+    const type = document.getElementById("type").value;
+    const lib = document.getElementById("libelle").value || "Opération";
+    const reg = document.getElementById("reglement").value;
+
+    if (!ht || ht <= 0) return alert("Montant non valide.");
+
+    const tva = ht * 0.2;
+    const ttc = ht + tva;
+    tvaGlobal += tva;
+
+    if (type.startsWith("6")) charges += ht;
+    else produits += ht;
+
+    updateStats();
+
+    const table = `
+    <table style="background:var(--bg-body); border:1px solid var(--border); margin-bottom:20px; border-radius:8px;">
+        <thead><tr><th colspan="2">RÉF: ${lib.toUpperCase()}</th><th>DÉBIT</th><th>CRÉDIT</th></tr></thead>
+        <tbody>
+            <tr><td>${type}</td><td>Compte Principal (HT)</td><td class="val-pos">${ht.toFixed(2)}</td><td></td></tr>
+            <tr><td>3455</td><td>État - TVA Récup.</td><td class="val-pos">${tva.toFixed(2)}</td><td></td></tr>
+            <tr><td>${reg}</td><td>Contrepartie (TTC)</td><td></td><td class="val-neg">${ttc.toFixed(2)}</td></tr>
+        </tbody>
+    </table>
+    `;
+
+    const out = document.getElementById("journal-output");
+    if (out.innerHTML.includes("Aucune")) out.innerHTML = "";
+    out.innerHTML = table + out.innerHTML;
+
+    document.getElementById("ht").value = "";
+    document.getElementById("libelle").value = "";
+}
+
+function updateStats() {
+    const res = produits - charges;
+    const marge = produits > 0 ? ((produits - charges) / produits * 100).toFixed(1) : 0;
+
+    document.getElementById("totalCharges").innerText = charges.toLocaleString() + " MAD";
+    document.getElementById("totalProduits").innerText = produits.toLocaleString() + " MAD";
+    const resText = document.getElementById("resultatNet");
+    resText.innerText = res.toLocaleString() + " MAD";
+    resText.style.color = res >= 0 ? "var(--success)" : "var(--danger)";
+    
+    document.getElementById("marge").innerText = marge + "%";
+    document.getElementById("tvaTotal").innerText = tvaGlobal.toLocaleString() + " MAD";
+}
+
+function saveLocal() {
+    localStorage.setItem("journal", document.getElementById("journal-output").innerHTML);
+    localStorage.setItem("charges", charges);
+    localStorage.setItem("produits", produits);
+    localStorage.setItem("tva", tvaGlobal);
+    alert("Session sauvegardée avec succès.");
+}
+
+function loadLocal() {
+    const savedJournal = localStorage.getItem("journal");
+    if(!savedJournal) return alert("Aucune sauvegarde trouvée.");
+    
+    document.getElementById("journal-output").innerHTML = savedJournal;
+    charges = parseFloat(localStorage.getItem("charges")) || 0;
+    produits = parseFloat(localStorage.getItem("produits")) || 0;
+    tvaGlobal = parseFloat(localStorage.getItem("tva")) || 0;
+    updateStats();
+    alert("Données restaurées.");
+}
+</script>
+
+</body>
+</html>
