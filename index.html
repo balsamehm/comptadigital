@@ -1,15 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ComptaDigital | Balsame Hammioui</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root {
   --bg: #f8f7f4;
-  --sidebar: #1a1a2e;
+  --sidebar-w: 240px;
+  --sidebar-bg: #1a1a2e;
   --card: #ffffff;
   --text: #1c1c2e;
   --muted: #7a7a9a;
@@ -21,10 +23,11 @@
   --border: #e8e8f0;
   --accent: #f0f0f8;
   --shadow: 0 2px 16px rgba(30,30,60,0.07);
+  --nav-h: 56px; /* hauteur barre nav mobile */
 }
 [data-theme="dark"] {
   --bg: #0d0d1a;
-  --sidebar: #060610;
+  --sidebar-bg: #060610;
   --card: #13132a;
   --text: #e8e8f5;
   --muted: #6a6a8a;
@@ -34,152 +37,467 @@
   --shadow: 0 2px 16px rgba(0,0,0,0.3);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  overflow: hidden;
-  transition: background 0.3s;
+html, body {
+height: 100%;
+font-family: ‘DM Sans’, sans-serif;
+background: var(–bg);
+color: var(–text);
+-webkit-font-smoothing: antialiased;
 }
 
-/* --- SIDEBAR RESPONSIVE --- */
+/* ==========================================
+LAYOUT DESKTOP (≥ 851px)
+========================================== */
+.app-shell {
+display: flex;
+height: 100vh;
+overflow: hidden;
+}
+
+/* SIDEBAR */
 .sidebar {
-  width: 240px;
-  background: var(--sidebar);
-  display: flex;
-  flex-direction: column;
-  padding: 32px 0;
-  flex-shrink: 0;
-  transition: transform 0.3s ease;
-  z-index: 1000;
+width: var(–sidebar-w);
+background: var(–sidebar-bg);
+display: flex;
+flex-direction: column;
+padding: 28px 0;
+flex-shrink: 0;
+overflow-y: auto;
 }
 
-/* --- MAIN CONTENT --- */
+.sidebar .logo {
+padding: 0 22px 24px;
+border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.sidebar .logo-text {
+font-size: 0.6rem;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: #4a6ff5;
+font-weight: 600;
+}
+.sidebar .logo-sub {
+color: rgba(255,255,255,0.28);
+font-size: 0.65rem;
+margin-top: 3px;
+}
+
+.nav { padding: 16px 10px; flex: 1; }
+.nav-item {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 10px 14px;
+border-radius: 8px;
+cursor: pointer;
+color: rgba(255,255,255,0.42);
+font-size: 0.82rem;
+margin-bottom: 2px;
+transition: background 0.15s, color 0.15s;
+user-select: none;
+}
+.nav-item:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); }
+.nav-item.active { background: rgba(45,91,227,0.22); color: #7b9bff; font-weight: 500; }
+
+.sidebar-footer {
+padding: 16px 22px;
+border-top: 1px solid rgba(255,255,255,0.08);
+color: rgba(255,255,255,0.35);
+font-size: 0.68rem;
+}
+
+/* MAIN AREA */
 .main {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px; /* Réduit pour mobile */
+flex: 1;
+display: flex;
+flex-direction: column;
+overflow: hidden;
 }
 
-/* --- MOBILE HEADER & BURGER --- */
-.mobile-nav-toggle {
-  display: none;
-  background: var(--sidebar);
-  color: white;
-  padding: 10px 15px;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1001;
+.topbar {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 20px 28px 16px;
+flex-shrink: 0;
+flex-wrap: wrap;
+gap: 10px;
+}
+.page-title { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em; }
+
+.theme-btn {
+padding: 7px 14px;
+border-radius: 7px;
+cursor: pointer;
+font-size: 0.78rem;
+border: 1px solid var(–border);
+background: var(–card);
+color: var(–text);
+font-family: inherit;
+transition: background 0.15s;
+}
+.theme-btn:hover { background: var(–accent); }
+
+.content-area {
+flex: 1;
+overflow-y: auto;
+padding: 0 28px 28px;
+-webkit-overflow-scrolling: touch;
 }
 
-.burger-btn {
-  background: none;
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
+/* ==========================================
+MOBILE BOTTOM NAV + OVERLAY (≤ 850px)
+========================================== */
+.mobile-bottom-nav {
+display: none;
+}
+.overlay {
+display: none;
 }
 
-/* --- TYPOGRAPHIE & ELEMENTS --- */
-.logo { padding: 0 24px 32px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-.logo-text { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: #4a6ff5; font-weight: 600; }
-.nav { padding: 20px 12px; flex: 1; }
-.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; cursor: pointer; color: rgba(255,255,255,0.45); font-size: 0.82rem; margin-bottom: 2px; }
-.nav-item.active { background: rgba(45,91,227,0.2); color: #6b8ff7; }
-
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
-.page-title { font-size: 1.2rem; font-weight: 600; }
-
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
-
-/* --- TABLES RESPONSIVES --- */
-.table-container { width: 100%; overflow-x: auto; }
-table { width: 100%; min-width: 500px; border-collapse: collapse; }
-th { text-align: left; padding: 10px; font-size: 0.65rem; color: var(--muted); border-bottom: 2px solid var(--border); }
-td { padding: 10px; font-size: 0.8rem; border-bottom: 1px solid var(--border); }
-
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
-.kpi { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 15px; }
-.kpi-value { font-size: 1.1rem; font-weight: 600; font-family: 'DM Mono'; }
-
-.charts-grid, .bilan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-
-/* --- MEDIA QUERIES (MOBILE) --- */
 @media (max-width: 850px) {
-  body { flex-direction: column; }
-  .sidebar {
-    position: fixed;
-    left: 0; top: 45px; bottom: 0;
-    transform: translateX(-100%);
-    width: 260px;
-  }
-  .sidebar.open { transform: translateX(0); }
-  .mobile-nav-toggle { display: flex; }
-  .main { padding: 16px; }
-  .charts-grid, .bilan-grid { grid-template-columns: 1fr; }
-  .page-header { flex-direction: column; align-items: flex-start; }
+.app-shell {
+flex-direction: column;
+height: 100dvh; /* dynamic viewport height - meilleur sur iOS */
 }
 
-/* Utilitaires */
-.mono { font-family: 'DM Mono', monospace; }
+/* Cacher la sidebar desktop */
+.sidebar { display: none; }
+
+/* TOPBAR mobile */
+.topbar {
+padding: 14px 16px 12px;
+background: var(–sidebar-bg);
+color: white;
+flex-shrink: 0;
+}
+.page-title { font-size: 1rem; color: white; }
+.theme-btn {
+border-color: rgba(255,255,255,0.2);
+background: rgba(255,255,255,0.08);
+color: white;
+font-size: 0.72rem;
+padding: 6px 10px;
+}
+.theme-btn:hover { background: rgba(255,255,255,0.15); }
+
+/* Content prend tout l’espace restant SAUF la nav */
+.main { flex: 1; overflow: hidden; }
+.content-area {
+flex: 1;
+padding: 14px 14px 80px; /* 80px pour laisser place à la nav bottom */
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
+height: calc(100dvh - var(–nav-h) - 56px); /* 56 = topbar */
+}
+
+/* BOTTOM NAV */
+.mobile-bottom-nav {
+display: flex;
+position: fixed;
+bottom: 0; left: 0; right: 0;
+height: var(–nav-h);
+background: var(–sidebar-bg);
+border-top: 1px solid rgba(255,255,255,0.08);
+z-index: 1000;
+padding: 0 4px;
+align-items: stretch;
+/* Gestion de la safe area iPhone (notch/home indicator) */
+padding-bottom: env(safe-area-inset-bottom, 0px);
+height: calc(var(–nav-h) + env(safe-area-inset-bottom, 0px));
+}
+
+.mobile-nav-btn {
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 3px;
+color: rgba(255,255,255,0.38);
+font-size: 0.55rem;
+font-weight: 500;
+letter-spacing: 0.03em;
+cursor: pointer;
+border: none;
+background: none;
+padding: 6px 2px;
+border-radius: 8px;
+transition: color 0.15s;
+font-family: inherit;
+-webkit-tap-highlight-color: transparent;
+}
+.mobile-nav-btn .nav-icon { display: none; }
+.mobile-nav-btn.active { color: #7b9bff; }
+.mobile-nav-btn.active .nav-dot {
+display: block;
+width: 4px; height: 4px;
+background: #7b9bff;
+border-radius: 50%;
+margin: 0 auto;
+}
+.nav-dot { display: none; }
+}
+
+/* ==========================================
+CARDS & GRILLES
+========================================== */
+.card {
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 12px;
+padding: 18px;
+margin-bottom: 16px;
+box-shadow: var(–shadow);
+}
+
+.form-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+gap: 12px;
+margin-bottom: 14px;
+}
+
+/* Sur mobile, forcer 1 colonne */
+@media (max-width: 500px) {
+.form-grid { grid-template-columns: 1fr; }
+}
+
+.form-label {
+display: block;
+font-size: 0.67rem;
+font-weight: 600;
+color: var(–muted);
+margin-bottom: 5px;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+}
+.form-control {
+width: 100%;
+padding: 10px 12px;
+border-radius: 7px;
+border: 1px solid var(–border);
+background: var(–bg);
+color: var(–text);
+font-family: inherit;
+font-size: 0.85rem;
+transition: border-color 0.15s;
+-webkit-appearance: none;
+}
+.form-control:focus {
+outline: none;
+border-color: var(–primary);
+}
+
+.btn-primary {
+background: var(–primary);
+color: white;
+border: none;
+padding: 12px 16px;
+border-radius: 8px;
+cursor: pointer;
+width: 100%;
+font-weight: 500;
+font-size: 0.88rem;
+font-family: inherit;
+transition: opacity 0.15s;
+-webkit-tap-highlight-color: transparent;
+}
+.btn-primary:active { opacity: 0.8; }
+
+/* ==========================================
+TABLE
+========================================== */
+.table-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; min-width: 420px; border-collapse: collapse; }
+th {
+text-align: left;
+padding: 9px 10px;
+font-size: 0.62rem;
+color: var(–muted);
+border-bottom: 2px solid var(–border);
+text-transform: uppercase;
+letter-spacing: 0.05em;
+white-space: nowrap;
+}
+td {
+padding: 9px 10px;
+font-size: 0.8rem;
+border-bottom: 1px solid var(–border);
+white-space: nowrap;
+}
+tr:last-child td { border-bottom: none; }
+
+/* ==========================================
+KPI GRID
+========================================== */
+.kpi-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+gap: 12px;
+margin-bottom: 16px;
+}
+.kpi {
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 10px;
+padding: 14px 16px;
+box-shadow: var(–shadow);
+}
+.kpi-label { font-size: 0.58rem; color: var(–muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.kpi-value { font-size: 1.05rem; font-weight: 600; font-family: ‘DM Mono’, monospace; }
+
+/* ==========================================
+CHARTS & BILAN
+========================================== */
+.charts-grid, .bilan-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 16px;
+}
+@media (max-width: 650px) {
+.charts-grid, .bilan-grid { grid-template-columns: 1fr; }
+}
+
+.chart-wrap {
+position: relative;
+height: 240px;
+}
+
+/* ==========================================
+PAGES
+========================================== */
+.page { display: none; animation: fadeIn 0.25s ease; }
+.page.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ==========================================
+UTILITAIRES
+========================================== */
+.mono { font-family: ‘DM Mono’, monospace; }
 .right { text-align: right; }
-.text-success { color: var(--success); }
-.text-danger { color: var(--danger); }
-.btn-primary { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 500; }
-.page { display: none; }
-.page.active { display: block; animation: fadeIn 0.3s; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.text-success { color: var(–success); }
+.text-danger { color: var(–danger); }
+.text-muted { color: var(–muted); }
+
+.section-title {
+font-size: 0.72rem;
+font-weight: 600;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 14px;
+}
+
+.empty-state {
+text-align: center;
+padding: 30px 20px;
+color: var(–muted);
+font-size: 0.82rem;
+}
+
+/* PCM Table spécifique */
+.pcm-badge {
+display: inline-block;
+padding: 2px 8px;
+border-radius: 4px;
+font-size: 0.68rem;
+font-family: ‘DM Mono’, monospace;
+font-weight: 500;
+background: var(–primary-light);
+color: var(–primary);
+}
+
+/* Export section */
+.export-option {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 14px 0;
+border-bottom: 1px solid var(–border);
+}
+.export-option:last-child { border-bottom: none; }
+.export-btn {
+padding: 7px 14px;
+border-radius: 6px;
+border: 1px solid var(–primary);
+color: var(–primary);
+background: none;
+cursor: pointer;
+font-size: 0.78rem;
+font-family: inherit;
+transition: background 0.15s;
+-webkit-tap-highlight-color: transparent;
+}
+.export-btn:hover, .export-btn:active { background: var(–primary-light); }
+
+/* Bilan lignes */
+.bilan-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 8px 0;
+border-bottom: 1px solid var(–border);
+font-size: 0.82rem;
+}
+.bilan-row:last-child { border-bottom: none; }
+.bilan-total {
+display: flex;
+justify-content: space-between;
+padding: 10px 0 0;
+margin-top: 8px;
+border-top: 2px solid var(–border);
+font-weight: 600;
+font-size: 0.85rem;
+font-family: ‘DM Mono’, monospace;
+}
 </style>
+
 </head>
 <body data-theme="light">
 
-<!-- Barre de navigation Mobile -->
-<div class="mobile-nav-toggle">
-  <div class="logo-text" style="color:white; letter-spacing:1px">ComptaDigital</div>
-  <button class="burger-btn" onclick="toggleSidebar()">Menu ☰</button>
-</div>
+<div class="app-shell">
 
-<div class="sidebar" id="sidebar">
-  <div class="logo">
-    <div class="logo-text">ComptaDigital</div>
-    <div class="logo-sub" style="color:rgba(255,255,255,0.3); font-size:0.7rem">Gestion PCM</div>
-  </div>
-  <div class="nav">
-    <div class="nav-item active" onclick="showPage('saisie',this)">Journal</div>
-    <div class="nav-item" onclick="showPage('stats',this)">Dashboard</div>
-    <div class="nav-item" onclick="showPage('bilan',this)">Bilan</div>
-    <div class="nav-item" onclick="showPage('pcm',this)">Plan Comptable</div>
-    <div class="nav-item" onclick="showPage('export',this)">Export</div>
-  </div>
-  <div class="sidebar-footer" style="padding:20px; border-top:1px solid rgba(255,255,255,0.1); color:white; font-size:0.7rem">
-    B. HAMMIOUI
-  </div>
-</div>
+  <!-- ===== SIDEBAR DESKTOP ===== -->
 
-<div class="main">
-  <div class="page-header">
-    <div>
-      <h2 class="page-title" id="pageTitle">Journal Comptable</h2>
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-text">ComptaDigital</div>
+      <div class="logo-sub">Gestion PCM</div>
     </div>
-    <button class="theme-btn" style="padding:8px 12px; border-radius:6px; cursor:pointer" onclick="toggleTheme()">Sombre / Clair</button>
+    <div class="nav">
+      <div class="nav-item active" onclick="showPage('saisie',this)">Journal</div>
+      <div class="nav-item" onclick="showPage('stats',this)">Dashboard</div>
+      <div class="nav-item" onclick="showPage('bilan',this)">Bilan</div>
+      <div class="nav-item" onclick="showPage('pcm',this)">Plan Comptable</div>
+      <div class="nav-item" onclick="showPage('export',this)">Export</div>
+    </div>
+    <div class="sidebar-footer">B. HAMMIOUI</div>
   </div>
 
-  <!-- PAGE SAISIE -->
+  <!-- ===== MAIN ===== -->
+
+  <div class="main">
+
+```
+<!-- Topbar (desktop: page title + toggle theme / mobile: même chose en dark) -->
+<div class="topbar">
+  <h2 class="page-title" id="pageTitle">Journal Comptable</h2>
+  <button class="theme-btn" onclick="toggleTheme()">Sombre / Clair</button>
+</div>
+
+<!-- Content -->
+<div class="content-area">
+
+  <!-- ===== PAGE SAISIE ===== -->
   <div id="saisie" class="page active">
     <div class="card">
       <div class="form-grid">
         <div>
-          <label style="font-size:0.7rem; font-weight:600; color:var(--muted)">Nature</label>
-          <select id="type" style="width:100%; padding:10px; border-radius:6px; border:1px solid var(--border)">
+          <label class="form-label">Nature</label>
+          <select id="type" class="form-control">
             <option value="achat">Achat (6111)</option>
             <option value="vente">Vente (7111)</option>
             <option value="service">Services (6141)</option>
@@ -187,144 +505,473 @@ td { padding: 10px; font-size: 0.8rem; border-bottom: 1px solid var(--border); }
           </select>
         </div>
         <div>
-          <label style="font-size:0.7rem; font-weight:600; color:var(--muted)">Montant HT</label>
-          <input type="number" id="ht" placeholder="0.00" style="width:100%; padding:10px; border-radius:6px; border:1px solid var(--border)">
+          <label class="form-label">Montant HT</label>
+          <input type="number" id="ht" class="form-control" placeholder="0.00" inputmode="decimal">
         </div>
         <div>
-          <label style="font-size:0.7rem; font-weight:600; color:var(--muted)">Libellé</label>
-          <input type="text" id="libelle" placeholder="Référence" style="width:100%; padding:10px; border-radius:6px; border:1px solid var(--border)">
+          <label class="form-label">Libellé</label>
+          <input type="text" id="libelle" class="form-control" placeholder="Référence">
         </div>
       </div>
-      <button class="btn-primary" onclick="ajouterEcriture()">Enregistrer l'opération</button>
+      <button class="btn-primary" onclick="ajouterEcriture()">+ Enregistrer l'opération</button>
     </div>
 
     <div class="card">
+      <div class="section-title">Écritures du journal</div>
       <div class="table-container">
-        <div id="journal-output"></div>
+        <div id="journal-output"><div class="empty-state">Aucune écriture enregistrée</div></div>
       </div>
     </div>
   </div>
 
-  <!-- PAGE STATS -->
+  <!-- ===== PAGE STATS ===== -->
   <div id="stats" class="page">
     <div class="kpi-grid">
       <div class="kpi">
-        <div style="font-size:0.6rem; color:var(--muted)">CA TOTAL</div>
+        <div class="kpi-label">CA Total</div>
         <div class="kpi-value text-success" id="kpi-ca">0 MAD</div>
       </div>
       <div class="kpi">
-        <div style="font-size:0.6rem; color:var(--muted)">CHARGES</div>
+        <div class="kpi-label">Charges</div>
         <div class="kpi-value text-danger" id="kpi-charges">0 MAD</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Résultat</div>
+        <div class="kpi-value" id="kpi-resultat">0 MAD</div>
       </div>
     </div>
     <div class="charts-grid">
-      <div class="card"><canvas id="chartDoughnut"></canvas></div>
-      <div class="card"><canvas id="chartBar"></canvas></div>
+      <div class="card">
+        <div class="section-title">Répartition</div>
+        <div class="chart-wrap"><canvas id="chartDoughnut"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="section-title">Par nature</div>
+        <div class="chart-wrap"><canvas id="chartBar"></canvas></div>
+      </div>
     </div>
   </div>
 
-  <!-- PAGE BILAN -->
+  <!-- ===== PAGE BILAN ===== -->
   <div id="bilan" class="page">
     <div class="bilan-grid">
-        <div class="card">
-            <h3 style="font-size:0.8rem; margin-bottom:15px; color:var(--primary)">ACTIF</h3>
-            <div id="bilan-actif-list"></div>
+      <div class="card">
+        <div class="section-title" style="color:var(--primary)">Actif</div>
+        <div id="bilan-actif-list">
+          <div class="bilan-row"><span>Trésorerie</span><span class="mono" id="bilan-tresorerie">0 MAD</span></div>
+          <div class="bilan-row"><span>Clients</span><span class="mono" id="bilan-clients">0 MAD</span></div>
+          <div class="bilan-total"><span>TOTAL ACTIF</span><span id="bilan-actif-total">0 MAD</span></div>
         </div>
-        <div class="card">
-            <h3 style="font-size:0.8rem; margin-bottom:15px; color:var(--success)">PASSIF</h3>
-            <div id="bilan-passif-list"></div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="color:var(--success)">Passif</div>
+        <div id="bilan-passif-list">
+          <div class="bilan-row"><span>Capital</span><span class="mono" id="bilan-capital">0 MAD</span></div>
+          <div class="bilan-row"><span>Fournisseurs</span><span class="mono" id="bilan-fournisseurs">0 MAD</span></div>
+          <div class="bilan-row"><span>Résultat net</span><span class="mono" id="bilan-resultat-net">0 MAD</span></div>
+          <div class="bilan-total"><span>TOTAL PASSIF</span><span id="bilan-passif-total">0 MAD</span></div>
         </div>
+      </div>
     </div>
   </div>
 
-</div>
+  <!-- ===== PAGE PCM ===== -->
+  <div id="pcm" class="page">
+    <div class="card">
+      <div class="section-title">Plan Comptable Marocain — extrait</div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Compte</th>
+              <th>Libellé</th>
+              <th>Classe</th>
+            </tr>
+          </thead>
+          <tbody id="pcm-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE EXPORT ===== -->
+  <div id="export" class="page">
+    <div class="card">
+      <div class="section-title">Exporter les données</div>
+      <div class="export-option">
+        <div>
+          <div style="font-size:0.85rem; font-weight:500">Journal en CSV</div>
+          <div class="text-muted" style="font-size:0.72rem">Toutes les écritures</div>
+        </div>
+        <button class="export-btn" onclick="exportCSV()">Télécharger</button>
+      </div>
+      <div class="export-option">
+        <div>
+          <div style="font-size:0.85rem; font-weight:500">Bilan en JSON</div>
+          <div class="text-muted" style="font-size:0.72rem">Données structurées</div>
+        </div>
+        <button class="export-btn" onclick="exportJSON()">Télécharger</button>
+      </div>
+      <div class="export-option">
+        <div>
+          <div style="font-size:0.85rem; font-weight:500">Vider le journal</div>
+          <div class="text-muted" style="font-size:0.72rem">Supprimer toutes les écritures</div>
+        </div>
+        <button class="export-btn" style="border-color:var(--danger); color:var(--danger);" onclick="clearAll()">Vider</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">Récapitulatif</div>
+      <div id="recap-content" class="text-muted" style="font-size:0.82rem">Aucune donnée.</div>
+    </div>
+  </div>
+
+</div><!-- /content-area -->
+```
+
+  </div><!-- /main -->
+</div><!-- /app-shell -->
+
+<!-- ===== BOTTOM NAV MOBILE ===== -->
+
+<nav class="mobile-bottom-nav" id="bottomNav">
+  <button class="mobile-nav-btn active" data-page="saisie" onclick="showPageMobile('saisie',this)">
+    <span class="nav-icon">—</span>
+    <span>Journal</span>
+    <span class="nav-dot"></span>
+  </button>
+  <button class="mobile-nav-btn" data-page="stats" onclick="showPageMobile('stats',this)">
+    <span class="nav-icon">—</span>
+    <span>Stats</span>
+    <span class="nav-dot"></span>
+  </button>
+  <button class="mobile-nav-btn" data-page="bilan" onclick="showPageMobile('bilan',this)">
+    <span class="nav-icon">—</span>
+    <span>Bilan</span>
+    <span class="nav-dot"></span>
+  </button>
+  <button class="mobile-nav-btn" data-page="pcm" onclick="showPageMobile('pcm',this)">
+    <span class="nav-icon">—</span>
+    <span>PCM</span>
+    <span class="nav-dot"></span>
+  </button>
+  <button class="mobile-nav-btn" data-page="export" onclick="showPageMobile('export',this)">
+    <span class="nav-icon">—</span>
+    <span>Export</span>
+    <span class="nav-dot"></span>
+  </button>
+</nav>
 
 <script>
-let ecritures = [];
-let chartDoughnut = null;
-let chartBar = null;
+/* ============================================================
+   DONNÉES
+   ============================================================ */
+let ecritures = JSON.parse(localStorage.getItem('ecritures') || '[]');
+let chartDoughnut = null, chartBar = null;
 
-// Gérer le menu mobile
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-}
+const PCM_DATA = [
+  { compte: '1111', libelle: 'Capital social', classe: '1 - Financement' },
+  { compte: '3421', libelle: 'Clients', classe: '3 - Actif circulant' },
+  { compte: '4411', libelle: 'Fournisseurs', classe: '4 - Passif circulant' },
+  { compte: '5141', libelle: 'Banque', classe: '5 - Trésorerie' },
+  { compte: '6111', libelle: 'Achats de marchandises', classe: '6 - Charges' },
+  { compte: '6141', libelle: 'Charges de location', classe: '6 - Charges' },
+  { compte: '6171', libelle: 'Charges de personnel', classe: '6 - Charges' },
+  { compte: '6200', libelle: 'Autres charges externes', classe: '6 - Charges' },
+  { compte: '7111', libelle: 'Ventes de marchandises', classe: '7 - Produits' },
+  { compte: '7121', libelle: 'Ventes de biens produits', classe: '7 - Produits' },
+  { compte: '7141', libelle: 'Travaux et services vendus', classe: '7 - Produits' },
+];
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+const pageTitles = {
+  saisie: 'Journal Comptable',
+  stats: 'Dashboard',
+  bilan: 'Bilan Comptable',
+  pcm: 'Plan Comptable',
+  export: 'Export'
+};
 
 function showPage(id, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  _activatePage(id);
+  // Synchro sidebar desktop
+  document.querySelectorAll('.sidebar .nav-item').forEach(n => n.classList.remove('active'));
   el.classList.add('active');
-  
-  // Fermer la sidebar sur mobile après clic
-  if(window.innerWidth < 850) toggleSidebar();
-  
-  if (id === 'stats') setTimeout(renderCharts, 100);
+  // Synchro bottom nav mobile
+  document.querySelectorAll('.mobile-nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.page === id);
+  });
 }
 
+function showPageMobile(id, el) {
+  _activatePage(id);
+  document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  // Synchro sidebar desktop
+  document.querySelectorAll('.sidebar .nav-item').forEach(n => {
+    n.classList.toggle('active', n.textContent.toLowerCase().includes(id) || n.getAttribute('onclick')?.includes(id));
+  });
+}
+
+function _activatePage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('pageTitle').textContent = pageTitles[id] || id;
+  if (id === 'stats') setTimeout(renderCharts, 80);
+  if (id === 'bilan') updateBilan();
+  if (id === 'pcm') renderPCM();
+  if (id === 'export') updateRecap();
+}
+
+/* ============================================================
+   THÈME
+   ============================================================ */
 function toggleTheme() {
   const b = document.body;
-  b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+  const newTheme = b.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  b.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  // Rechargement des charts si visibles
+  if (document.getElementById('stats').classList.contains('active')) {
+    setTimeout(renderCharts, 80);
+  }
 }
 
+// Appliquer le thème sauvegardé
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved) document.body.setAttribute('data-theme', saved);
+})();
+
+/* ============================================================
+   SAISIE
+   ============================================================ */
 function ajouterEcriture() {
   const ht = parseFloat(document.getElementById('ht').value);
   const type = document.getElementById('type').value;
-  const libelle = document.getElementById('libelle').value || 'Opération';
-  if (!ht) return alert('Saisir un montant');
+  const libelle = document.getElementById('libelle').value.trim() || 'Opération';
+  if (!ht || isNaN(ht)) { alert('Saisir un montant valide'); return; }
 
   const obj = {
     id: Date.now(),
     type,
-    ht,
+    ht: Math.round(ht * 100) / 100,
     libelle,
-    tva: ht * 0.20,
-    ttc: ht * 1.20,
-    date: new Date().toLocaleDateString()
+    tva: Math.round(ht * 0.20 * 100) / 100,
+    ttc: Math.round(ht * 1.20 * 100) / 100,
+    date: new Date().toLocaleDateString('fr-MA')
   };
-  
+
   ecritures.push(obj);
+  save();
   renderJournal();
   updateKPIs();
   document.getElementById('ht').value = '';
+  document.getElementById('libelle').value = '';
 }
 
 function renderJournal() {
   const out = document.getElementById('journal-output');
-  if(ecritures.length === 0) { out.innerHTML = "Aucune donnée"; return; }
-  
-  let html = `<table><tr><th>Date</th><th>Libellé</th><th>HT</th><th>TTC</th></tr>`;
-  ecritures.forEach(e => {
-    html += `<tr><td>${e.date}</td><td>${e.libelle}</td><td class="mono">${e.ht}</td><td class="mono">${e.ttc}</td></tr>`;
+  if (ecritures.length === 0) {
+    out.innerHTML = '<div class="empty-state">Aucune écriture enregistrée</div>';
+    return;
+  }
+  let html = `<table>
+    <thead><tr><th>Date</th><th>Libellé</th><th>Nature</th><th>HT</th><th>TTC</th></tr></thead><tbody>`;
+  [...ecritures].reverse().forEach(e => {
+    const badge = { achat: 'Achat', vente: 'Vente', service: 'Service', salaire: 'Salaire' }[e.type] || e.type;
+    html += `<tr>
+      <td>${e.date}</td>
+      <td>${e.libelle}</td>
+      <td>${badge}</td>
+      <td class="mono">${fmt(e.ht)}</td>
+      <td class="mono">${fmt(e.ttc)}</td>
+    </tr>`;
   });
-  html += `</table>`;
+  html += '</tbody></table>';
   out.innerHTML = html;
 }
 
+/* ============================================================
+   KPIs
+   ============================================================ */
 function updateKPIs() {
-  let ca = 0, ch = 0;
-  ecritures.forEach(e => {
-    if(e.type === 'vente') ca += e.ht;
-    else ch += e.ht;
-  });
-  document.getElementById('kpi-ca').innerText = ca.toLocaleString() + ' MAD';
-  document.getElementById('kpi-charges').innerText = ch.toLocaleString() + ' MAD';
+  const { ca, charges } = calcTotals();
+  const res = ca - charges;
+  document.getElementById('kpi-ca').textContent = fmt(ca);
+  document.getElementById('kpi-charges').textContent = fmt(charges);
+  const el = document.getElementById('kpi-resultat');
+  if (el) {
+    el.textContent = fmt(res);
+    el.className = 'kpi-value ' + (res >= 0 ? 'text-success' : 'text-danger');
+  }
 }
 
-function renderCharts() {
-  let ca = 0, ch = 0;
-  ecritures.forEach(e => { if(e.type === 'vente') ca += e.ht; else ch += e.ht; });
+function calcTotals() {
+  let ca = 0, charges = 0;
+  ecritures.forEach(e => {
+    if (e.type === 'vente') ca += e.ht;
+    else charges += e.ht;
+  });
+  return { ca, charges };
+}
 
+/* ============================================================
+   CHARTS
+   ============================================================ */
+function renderCharts() {
+  updateKPIs();
+  const { ca, charges } = calcTotals();
+
+  const isDark = document.body.getAttribute('data-theme') === 'dark';
+  const textColor = isDark ? '#9a9ab0' : '#7a7a9a';
+
+  // Doughnut
   const ctxD = document.getElementById('chartDoughnut').getContext('2d');
-  if(chartDoughnut) chartDoughnut.destroy();
+  if (chartDoughnut) chartDoughnut.destroy();
   chartDoughnut = new Chart(ctxD, {
     type: 'doughnut',
     data: {
       labels: ['Produits', 'Charges'],
-      datasets: [{ data: [ca, ch], backgroundColor: ['#059669', '#dc2626'] }]
+      datasets: [{ data: [ca || 0, charges || 0], backgroundColor: ['#059669', '#dc2626'], borderWidth: 0 }]
     },
-    options: { responsive: true, maintainAspectRatio: false }
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: textColor, font: { family: 'DM Sans', size: 12 } } }
+      }
+    }
+  });
+
+  // Bar par nature
+  const byType = {};
+  ecritures.forEach(e => {
+    byType[e.type] = (byType[e.type] || 0) + e.ht;
+  });
+  const ctxB = document.getElementById('chartBar').getContext('2d');
+  if (chartBar) chartBar.destroy();
+  chartBar = new Chart(ctxB, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(byType),
+      datasets: [{
+        label: 'Montant HT',
+        data: Object.values(byType),
+        backgroundColor: '#2d5be3',
+        borderRadius: 6,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: textColor }, grid: { display: false } },
+        y: { ticks: { color: textColor }, grid: { color: isDark ? '#1e1e3a' : '#e8e8f0' } }
+      }
+    }
   });
 }
+
+/* ============================================================
+   BILAN
+   ============================================================ */
+function updateBilan() {
+  const { ca, charges } = calcTotals();
+  const res = ca - charges;
+  const tresorerie = ca;
+  const clients = 0;
+  const capital = 10000;
+  const fournisseurs = charges;
+
+  document.getElementById('bilan-tresorerie').textContent = fmt(tresorerie);
+  document.getElementById('bilan-clients').textContent = fmt(clients);
+  document.getElementById('bilan-actif-total').textContent = fmt(tresorerie + clients);
+  document.getElementById('bilan-capital').textContent = fmt(capital);
+  document.getElementById('bilan-fournisseurs').textContent = fmt(fournisseurs);
+  document.getElementById('bilan-resultat-net').textContent = fmt(res);
+  document.getElementById('bilan-passif-total').textContent = fmt(capital + fournisseurs + res);
+}
+
+/* ============================================================
+   PCM
+   ============================================================ */
+function renderPCM() {
+  const tbody = document.getElementById('pcm-tbody');
+  tbody.innerHTML = PCM_DATA.map(r => `
+    <tr>
+      <td><span class="pcm-badge">${r.compte}</span></td>
+      <td>${r.libelle}</td>
+      <td style="font-size:0.72rem; color:var(--muted)">${r.classe}</td>
+    </tr>`).join('');
+}
+
+/* ============================================================
+   EXPORT
+   ============================================================ */
+function updateRecap() {
+  const { ca, charges } = calcTotals();
+  const el = document.getElementById('recap-content');
+  if (ecritures.length === 0) { el.textContent = 'Aucune donnée.'; return; }
+  el.innerHTML = `
+    <div style="display:grid; gap:8px">
+      <div>Écritures : <strong>${ecritures.length}</strong></div>
+      <div>Chiffre d'affaires : <strong class="text-success">${fmt(ca)}</strong></div>
+      <div>Charges totales : <strong class="text-danger">${fmt(charges)}</strong></div>
+      <div>Résultat net : <strong class="${ca-charges>=0?'text-success':'text-danger'}">${fmt(ca-charges)}</strong></div>
+    </div>`;
+}
+
+function exportCSV() {
+  if (ecritures.length === 0) { alert('Aucune donnée à exporter'); return; }
+  const header = 'Date,Libelle,Type,HT,TVA,TTC\n';
+  const rows = ecritures.map(e => `${e.date},"${e.libelle}",${e.type},${e.ht},${e.tva},${e.ttc}`).join('\n');
+  download('journal.csv', header + rows, 'text/csv');
+}
+
+function exportJSON() {
+  const { ca, charges } = calcTotals();
+  const data = { ecritures, bilan: { ca, charges, resultat: ca - charges } };
+  download('bilan.json', JSON.stringify(data, null, 2), 'application/json');
+}
+
+function clearAll() {
+  if (!confirm('Supprimer toutes les écritures ?')) return;
+  ecritures = [];
+  save();
+  renderJournal();
+  updateKPIs();
+  updateRecap();
+}
+
+function download(name, content, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], { type }));
+  a.download = name;
+  a.click();
+}
+
+/* ============================================================
+   UTILS
+   ============================================================ */
+function fmt(n) {
+  return n.toLocaleString('fr-MA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MAD';
+}
+
+function save() {
+  try { localStorage.setItem('ecritures', JSON.stringify(ecritures)); } catch(e) {}
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderJournal();
+updateKPIs();
 </script>
+
 </body>
 </html>
