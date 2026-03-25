@@ -1,330 +1,450 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ComptaDigital | Balsame Hammioui</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<style>
-:root {
-  --bg: #f8f7f4;
-  --sidebar: #1a1a2e;
-  --card: #ffffff;
-  --text: #1c1c2e;
-  --muted: #7a7a9a;
-  --primary: #2d5be3;
-  --primary-light: #eef2ff;
-  --success: #059669;
-  --danger: #dc2626;
-  --warning: #d97706;
-  --border: #e8e8f0;
-  --accent: #f0f0f8;
-  --shadow: 0 2px 16px rgba(30,30,60,0.07);
-}
-[data-theme="dark"] {
-  --bg: #0d0d1a;
-  --sidebar: #060610;
-  --card: #13132a;
-  --text: #e8e8f5;
-  --muted: #6a6a8a;
-  --border: #1e1e3a;
-  --accent: #1a1a30;
-  --primary-light: #1a2050;
-  --shadow: 0 2px 16px rgba(0,0,0,0.3);
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComptaDigital Pro | Balsame Hammioui</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* VARIABLES DE COULEURS ET THÈMES */
+        :root {
+            --bg-body: #f8fafc;
+            --bg-sidebar: #0f172a;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --border: #e2e8f0;
+            --accent: #f1f5f9;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+        [data-theme="dark"] {
+            --bg-body: #020617;
+            --bg-sidebar: #000000;
+            --bg-card: #0f172a;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+            --accent: #1e293b;
+        }
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  overflow: hidden;
-  transition: background 0.3s;
-}
+        /* STRUCTURE GÉNÉRALE */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background: var(--bg-body);
+            color: var(--text-main);
+            transition: background 0.3s, color 0.3s;
+            overflow: hidden;
+        }
 
-/* --- SIDEBAR RESPONSIVE --- */
-.sidebar {
-  width: 240px;
-  background: var(--sidebar);
-  display: flex;
-  flex-direction: column;
-  padding: 32px 0;
-  flex-shrink: 0;
-  transition: transform 0.3s ease;
-  z-index: 1000;
-}
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-sidebar);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 20px;
+            border-right: 1px solid var(--border);
+            flex-shrink: 0;
+            transition: 0.3s;
+        }
 
-/* --- MAIN CONTENT --- */
-.main {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px; /* Réduit pour mobile */
-}
+        .sidebar h1 {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+        }
 
-/* --- MOBILE HEADER & BURGER --- */
-.mobile-nav-toggle {
-  display: none;
-  background: var(--sidebar);
-  color: white;
-  padding: 10px 15px;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1001;
-}
+        .nav-item {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
 
-.burger-btn {
-  background: none;
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
+        .nav-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: white;
+        }
 
-/* --- TYPOGRAPHIE & ELEMENTS --- */
-.logo { padding: 0 24px 32px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-.logo-text { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: #4a6ff5; font-weight: 600; }
-.nav { padding: 20px 12px; flex: 1; }
-.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; cursor: pointer; color: rgba(255,255,255,0.45); font-size: 0.82rem; margin-bottom: 2px; }
-.nav-item.active { background: rgba(45,91,227,0.2); color: #6b8ff7; }
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
 
-.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
-.page-title { font-size: 1.2rem; font-weight: 600; }
+        /* SIGNATURE */
+        .signature {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.65rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .signature span {
+            display: block;
+            color: #f1f5f9;
+            font-weight: 700;
+            margin-top: 5px;
+            font-size: 0.75rem;
+        }
 
-/* --- TABLES RESPONSIVES --- */
-.table-container { width: 100%; overflow-x: auto; }
-table { width: 100%; min-width: 500px; border-collapse: collapse; }
-th { text-align: left; padding: 10px; font-size: 0.65rem; color: var(--muted); border-bottom: 2px solid var(--border); }
-td { padding: 10px; font-size: 0.8rem; border-bottom: 1px solid var(--border); }
+        /* CONTENU PRINCIPAL */
+        .main-content {
+            flex: 1;
+            padding: 40px 60px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
 
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
-.kpi { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 15px; }
-.kpi-value { font-size: 1.1rem; font-weight: 600; font-family: 'DM Mono'; }
+        .header-tools {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+        }
 
-.charts-grid, .bilan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .theme-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        }
 
-/* --- MEDIA QUERIES (MOBILE) --- */
-@media (max-width: 850px) {
-  body { flex-direction: column; }
-  .sidebar {
-    position: fixed;
-    left: 0; top: 45px; bottom: 0;
-    transform: translateX(-100%);
-    width: 260px;
-  }
-  .sidebar.open { transform: translateX(0); }
-  .mobile-nav-toggle { display: flex; }
-  .main { padding: 16px; }
-  .charts-grid, .bilan-grid { grid-template-columns: 1fr; }
-  .page-header { flex-direction: column; align-items: flex-start; }
-}
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
 
-/* Utilitaires */
-.mono { font-family: 'DM Mono', monospace; }
-.right { text-align: right; }
-.text-success { color: var(--success); }
-.text-danger { color: var(--danger); }
-.btn-primary { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 500; }
-.page { display: none; }
-.page.active { display: block; animation: fadeIn 0.3s; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-</style>
+        .title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+        }
+
+        .title::before {
+            content: "";
+            width: 4px;
+            height: 18px;
+            background: var(--primary);
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            padding: 25px;
+            border-radius: 12px;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
+        .stat-value { font-size: 1.5rem; font-weight: 700; margin-top: 10px; }
+
+        .rentable-bar {
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .rentable-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            transition: 1s;
+        }
+
+        .table-container { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        th { text-align: left; padding: 15px; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.65rem; text-transform: uppercase; }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        .val-debit { color: var(--success); font-weight: 700; text-align: right; }
+        .val-credit { color: var(--danger); font-weight: 700; text-align: right; }
+
+        .page { display: none; }
+        .page.active { display: block; animation: fadeInUp 0.4s ease forwards; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 850px) {
+            body { flex-direction: column; overflow-y: auto; height: auto; }
+            .sidebar { width: 100%; padding: 20px; height: auto; position: sticky; top: 0; border-right: none; border-bottom: 1px solid var(--border); }
+            .sidebar h1 { margin-bottom: 15px; font-size: 0.8rem; border: none; padding: 0; }
+            .nav-container { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 5px; }
+            .nav-item { margin-bottom: 0; white-space: nowrap; padding: 10px 15px; font-size: 0.75rem; }
+            .signature { display: none; }
+            .main-content { padding: 25px; margin-left: 0; width: 100%; box-sizing: border-box; }
+            .stat-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
 </head>
 <body data-theme="light">
 
-<!-- Barre de navigation Mobile -->
-<div class="mobile-nav-toggle">
-  <div class="logo-text" style="color:white; letter-spacing:1px">ComptaDigital</div>
-  <button class="burger-btn" onclick="toggleSidebar()">Menu ☰</button>
-</div>
-
-<div class="sidebar" id="sidebar">
-  <div class="logo">
-    <div class="logo-text">ComptaDigital</div>
-    <div class="logo-sub" style="color:rgba(255,255,255,0.3); font-size:0.7rem">Gestion PCM</div>
-  </div>
-  <div class="nav">
-    <div class="nav-item active" onclick="showPage('saisie',this)">Journal</div>
-    <div class="nav-item" onclick="showPage('stats',this)">Dashboard</div>
-    <div class="nav-item" onclick="showPage('bilan',this)">Bilan</div>
-    <div class="nav-item" onclick="showPage('pcm',this)">Plan Comptable</div>
-    <div class="nav-item" onclick="showPage('export',this)">Export</div>
-  </div>
-  <div class="sidebar-footer" style="padding:20px; border-top:1px solid rgba(255,255,255,0.1); color:white; font-size:0.7rem">
-    B. HAMMIOUI
-  </div>
-</div>
-
-<div class="main">
-  <div class="page-header">
-    <div>
-      <h2 class="page-title" id="pageTitle">Journal Comptable</h2>
-    </div>
-    <button class="theme-btn" style="padding:8px 12px; border-radius:6px; cursor:pointer" onclick="toggleTheme()">Sombre / Clair</button>
-  </div>
-
-  <!-- PAGE SAISIE -->
-  <div id="saisie" class="page active">
-    <div class="card">
-      <div class="form-grid">
-        <div>
-          <label style="font-size:0.7rem; font-weight:600; color:var(--muted)">Nature</label>
-          <select id="type" style="width:100%; padding:10px; border-radius:6px; border:1px solid var(--border)">
-            <option value="achat">Achat (6111)</option>
-            <option value="vente">Vente (7111)</option>
-            <option value="service">Services (6141)</option>
-            <option value="salaire">Salaires (6171)</option>
-          </select>
+    <div class="sidebar">
+        <h1>ComptaDigital</h1>
+        <div class="nav-container">
+            <div class="nav-item active" onclick="showPage('saisie', this)">Journal</div>
+            <div class="nav-item" onclick="showPage('pcm', this)">Plan Comptable</div>
+            <div class="nav-item" onclick="showPage('stats', this)">Statistiques</div>
+            <div class="nav-item" onclick="showPage('save', this)">Sauvegarde</div>
         </div>
-        <div>
-          <label style="font-size:0.7rem; font-weight:600; color:var(--muted)">Montant HT</label>
-          <input type="number" id="ht" placeholder="0.00" style="width:100%; padding:10px; border-radius:6px; border:1px solid var(--border)">
+        <div class="signature">Développé par <span>BALSAME HAMMIOUI</span></div>
+    </div>
+
+    <div class="main-content">
+        <div class="header-tools">
+            <button class="theme-btn" onclick="toggleTheme()">Mode Sombre / Clair</button>
         </div>
-        <div>
-          <label style="font-size:0.7rem; font-weight:600; color:var(--muted)">Libellé</label>
-          <input type="text" id="libelle" placeholder="Référence" style="width:100%; padding:10px; border-radius:6px; border:1px solid var(--border)">
+
+        <div id="saisie" class="page active">
+            <div class="card">
+                <div class="title">Nouvelle Ecriture Comptable</div>
+                <div class="form-grid">
+                    <div>
+                        <label>Compte (Nature)</label>
+                        <select id="type">
+                            <option value="6111">Achat de Marchandises (6111)</option>
+                            <option value="7111">Vente de Marchandises (7111)</option>
+                            <option value="6141">Services Exterieurs (6141)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Montant HT (MAD)</label>
+                        <input type="number" id="ht" placeholder="0.00">
+                    </div>
+                    <div>
+                        <label>Reference</label>
+                        <input type="text" id="libelle" placeholder="Ex: FACT_001">
+                    </div>
+                    <div>
+                        <label>Reglement</label>
+                        <select id="reglement">
+                            <option value="5141">Banque</option>
+                            <option value="5161">Caisse</option>
+                            <option value="4411">Fournisseur</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-submit" onclick="ajouterAuJournal()">Enregistrer l'operation</button>
+            </div>
+
+            <div class="card">
+                <div class="title">Historique des Operations</div>
+                <div id="journal-output" class="table-container">
+                    <p style="text-align: center; color: var(--text-muted); padding: 20px;">Aucune ecriture enregistree.</p>
+                </div>
+            </div>
         </div>
-      </div>
-      <button class="btn-primary" onclick="ajouterEcriture()">Enregistrer l'opération</button>
-    </div>
 
-    <div class="card">
-      <div class="table-container">
-        <div id="journal-output"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PAGE STATS -->
-  <div id="stats" class="page">
-    <div class="kpi-grid">
-      <div class="kpi">
-        <div style="font-size:0.6rem; color:var(--muted)">CA TOTAL</div>
-        <div class="kpi-value text-success" id="kpi-ca">0 MAD</div>
-      </div>
-      <div class="kpi">
-        <div style="font-size:0.6rem; color:var(--muted)">CHARGES</div>
-        <div class="kpi-value text-danger" id="kpi-charges">0 MAD</div>
-      </div>
-    </div>
-    <div class="charts-grid">
-      <div class="card"><canvas id="chartDoughnut"></canvas></div>
-      <div class="card"><canvas id="chartBar"></canvas></div>
-    </div>
-  </div>
-
-  <!-- PAGE BILAN -->
-  <div id="bilan" class="page">
-    <div class="bilan-grid">
-        <div class="card">
-            <h3 style="font-size:0.8rem; margin-bottom:15px; color:var(--primary)">ACTIF</h3>
-            <div id="bilan-actif-list"></div>
+        <div id="pcm" class="page">
+            <div class="card">
+                <div class="title">Plan Comptable Marocain</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Code</th><th>Intitule</th><th>Nature</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1111</td><td>Capital Social</td><td>Financement</td></tr>
+                            <tr><td>3421</td><td>Clients</td><td>Actif</td></tr>
+                            <tr><td>4411</td><td>Fournisseurs</td><td>Passif</td></tr>
+                            <tr><td>6111</td><td>Achats</td><td>Charges</td></tr>
+                            <tr><td>7111</td><td>Ventes</td><td>Produits</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="card">
-            <h3 style="font-size:0.8rem; margin-bottom:15px; color:var(--success)">PASSIF</h3>
-            <div id="bilan-passif-list"></div>
+
+        <div id="stats" class="page">
+            <div class="card">
+                <div class="title">Analyse Financiere</div>
+                <div class="stat-grid">
+                    <div class="stat-item" style="border-top: 4px solid var(--danger);">
+                        <div class="stat-label">Total Charges</div>
+                        <div id="totalCharges" class="stat-value" style="color:var(--danger)">0.00 MAD</div>
+                    </div>
+                    <div class="stat-item" style="border-top: 4px solid var(--success);">
+                        <div class="stat-label">Total Produits</div>
+                        <div id="totalProduits" class="stat-value" style="color:var(--success)">0.00 MAD</div>
+                    </div>
+                </div>
+                <div class="stat-item" style="margin-top:20px; border-top: 4px solid var(--primary); background: var(--accent);">
+                    <div class="stat-label">Resultat Net</div>
+                    <div id="resultatNet" class="stat-value">0.00 MAD</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="title">Seuil de Rentabilite</div>
+                <p id="rentableMsg" style="font-size: 0.85rem; color: var(--text-muted);">En attente de donnees...</p>
+                <div class="rentable-bar">
+                    <div id="rentableFill" class="rentable-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="save" class="page">
+            <div class="card">
+                <div class="title">Gestion des Donnees</div>
+                <div style="display: flex; gap: 15px; flex-direction: column;">
+                    <button class="btn-submit" onclick="saveLocal()">Sauvegarder la session</button>
+                    <button class="btn-submit" style="background:#64748b" onclick="loadLocal()">Restaurer la sauvegarde</button>
+                </div>
+            </div>
         </div>
     </div>
-  </div>
 
-</div>
-
-<script>
-let ecritures = [];
-let chartDoughnut = null;
-let chartBar = null;
-
-// Gérer le menu mobile
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-}
-
-function showPage(id, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  el.classList.add('active');
-  
-  // Fermer la sidebar sur mobile après clic
-  if(window.innerWidth < 850) toggleSidebar();
-  
-  if (id === 'stats') setTimeout(renderCharts, 100);
-}
-
-function toggleTheme() {
-  const b = document.body;
-  b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
-}
-
-function ajouterEcriture() {
-  const ht = parseFloat(document.getElementById('ht').value);
-  const type = document.getElementById('type').value;
-  const libelle = document.getElementById('libelle').value || 'Opération';
-  if (!ht) return alert('Saisir un montant');
-
-  const obj = {
-    id: Date.now(),
-    type,
-    ht,
-    libelle,
-    tva: ht * 0.20,
-    ttc: ht * 1.20,
-    date: new Date().toLocaleDateString()
-  };
-  
-  ecritures.push(obj);
-  renderJournal();
-  updateKPIs();
-  document.getElementById('ht').value = '';
-}
-
-function renderJournal() {
-  const out = document.getElementById('journal-output');
-  if(ecritures.length === 0) { out.innerHTML = "Aucune donnée"; return; }
-  
-  let html = `<table><tr><th>Date</th><th>Libellé</th><th>HT</th><th>TTC</th></tr>`;
-  ecritures.forEach(e => {
-    html += `<tr><td>${e.date}</td><td>${e.libelle}</td><td class="mono">${e.ht}</td><td class="mono">${e.ttc}</td></tr>`;
-  });
-  html += `</table>`;
-  out.innerHTML = html;
-}
-
-function updateKPIs() {
-  let ca = 0, ch = 0;
-  ecritures.forEach(e => {
-    if(e.type === 'vente') ca += e.ht;
-    else ch += e.ht;
-  });
-  document.getElementById('kpi-ca').innerText = ca.toLocaleString() + ' MAD';
-  document.getElementById('kpi-charges').innerText = ch.toLocaleString() + ' MAD';
-}
-
-function renderCharts() {
-  let ca = 0, ch = 0;
-  ecritures.forEach(e => { if(e.type === 'vente') ca += e.ht; else ch += e.ht; });
-
-  const ctxD = document.getElementById('chartDoughnut').getContext('2d');
-  if(chartDoughnut) chartDoughnut.destroy();
-  chartDoughnut = new Chart(ctxD, {
-    type: 'doughnut',
-    data: {
-      labels: ['Produits', 'Charges'],
-      datasets: [{ data: [ca, ch], backgroundColor: ['#059669', '#dc2626'] }]
-    },
-    options: { responsive: true, maintainAspectRatio: false }
-  });
-}
-</script>
+    <script>
+        let charges = 0, produits = 0;
+        function toggleTheme() {
+            const b = document.body;
+            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+        }
+        function showPage(p, el) {
+            document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+            document.getElementById(p).classList.add('active');
+            el.classList.add('active');
+        }
+        function ajouterAuJournal() {
+            const ht = parseFloat(document.getElementById('ht').value);
+            const code = document.getElementById('type').value;
+            const lib = (document.getElementById('libelle').value || "SANS LIBELLE").toUpperCase();
+            const reg = document.getElementById('reglement').value;
+            if (isNaN(ht) || ht <= 0) return alert("Montant invalide");
+            const tva = ht * 0.20; const ttc = ht + tva;
+            if (code.startsWith('6')) charges += ht; else produits += ht;
+            updateUI();
+            const entry = `
+            <table style="margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                <thead><tr style="background: var(--accent);"><th colspan="2">REF: ${lib}</th><th style="text-align:right">DEBIT</th><th style="text-align:right">CREDIT</th></tr></thead>
+                <tbody>
+                    <tr><td>${code}</td><td>Principal HT</td><td class="val-debit">${ht.toFixed(2)}</td><td></td></tr>
+                    <tr><td>3455</td><td>TVA Recup.</td><td class="val-debit">${tva.toFixed(2)}</td><td></td></tr>
+                    <tr><td>${reg}</td><td>Contrepartie</td><td></td><td class="val-credit">${ttc.toFixed(2)}</td></tr>
+                </tbody>
+            </table>`;
+            const out = document.getElementById('journal-output');
+            if (out.innerHTML.includes("Aucune")) out.innerHTML = "";
+            out.innerHTML = entry + out.innerHTML;
+            document.getElementById('ht').value = ""; document.getElementById('libelle').value = "";
+        }
+        function updateUI() {
+            const res = produits - charges;
+            document.getElementById('totalCharges').innerText = charges.toFixed(2) + " MAD";
+            document.getElementById('totalProduits').innerText = produits.toFixed(2) + " MAD";
+            const rEl = document.getElementById('resultatNet');
+            rEl.innerText = res.toFixed(2) + " MAD";
+            rEl.style.color = res >= 0 ? "var(--success)" : "var(--danger)";
+            const ratio = charges > 0 ? Math.min((produits / charges) * 100, 100) : 0;
+            document.getElementById('rentableFill').style.width = ratio + "%";
+            document.getElementById('rentableMsg').innerText = ratio >= 100 ? "Bénéfice atteint" : "Couverture : " + Math.round(ratio) + "%";
+        }
+        function saveLocal() {
+            localStorage.setItem('j_dat', document.getElementById('journal-output').innerHTML);
+            localStorage.setItem('c_dat', charges); localStorage.setItem('p_dat', produits);
+            alert("Session sauvegardée");
+        }
+        function loadLocal() {
+            const j = localStorage.getItem('j_dat');
+            if (j) {
+                document.getElementById('journal-output').innerHTML = j;
+                charges = parseFloat(localStorage.getItem('c_dat')) || 0;
+                produits = parseFloat(localStorage.getItem('p_dat')) || 0;
+                updateUI();
+                alert("Données restaurées");
+            }
+        }
+    </script>
 </body>
 </html>
