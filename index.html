@@ -2,293 +2,178 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ComptaDigital Pro | Balsame Hammioui</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=DM+Mono&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComptaDigital - Tableau de Bord</title>
+    <!-- Tailwind CSS pour le style rapide -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js pour les graphiques interactifs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <style>
-        :root {
-            --bg-body: #020617;
-            --bg-sidebar: #000000;
-            --bg-card: #0f172a;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --primary: #2563eb;
-            --primary-light: #172554;
-            --border: #1e293b;
-            --accent: #1e293b;
-            --success: #10b981;
-            --danger: #ef4444;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            height: 100vh;
-            background: var(--bg-body);
-            color: var(--text-main);
-            overflow: hidden;
-        }
-
-        /* SIDEBAR DESKTOP */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-sidebar);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            padding: 30px 20px;
-            flex-shrink: 0;
-            z-index: 100;
-        }
-
-        .sidebar h1 {
-            font-size: 0.9rem;
-            color: var(--primary);
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .nav-item {
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            color: #94a3b8;
-            font-size: 0.85rem;
-            transition: 0.2s;
-        }
-
-        .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
-        .nav-item.active { background: var(--primary); color: white; }
-
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* --- LE CORRECTIF MOBILE (POUR TON IPHONE) --- */
-        @media (max-width: 850px) {
-            body { flex-direction: column; height: auto; overflow: auto; }
-            .sidebar { 
-                width: 100%; 
-                height: auto; 
-                padding: 15px; 
-                position: sticky; 
-                top: 0; 
-            }
-            .sidebar h1 { display: none; }
-            .nav-container { 
-                display: flex; 
-                overflow-x: auto; 
-                gap: 8px; 
-                scrollbar-width: none;
-            }
-            .nav-container::-webkit-scrollbar { display: none; }
-            .nav-item { margin-bottom: 0; white-space: nowrap; padding: 10px 15px; font-size: 0.75rem; }
-            .main-content { padding: 15px; width: 100%; }
-            .form-grid { grid-template-columns: 1fr !important; gap: 10px; }
-            .kpi-grid { grid-template-columns: 1fr 1fr !important; gap: 10px; }
-            .chart-container { height: 250px !important; }
-        }
-
-        .card {
-            background: var(--bg-card);
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; color: var(--primary); }
-
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        label { display: block; font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            background: #1e293b;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .btn-submit {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: 700;
-            width: 100%;
-            margin-top: 15px;
-            cursor: pointer;
-        }
-
-        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
-        .kpi-card { background: var(--bg-card); padding: 15px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
-        .kpi-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; }
-        .kpi-value { font-size: 1rem; font-weight: 700; font-family: 'DM Mono', monospace; margin-top: 5px; }
-
-        .table-wrapper { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-        th { text-align: left; padding: 10px; border-bottom: 2px solid var(--border); color: var(--text-muted); }
-        td { padding: 10px; border-bottom: 1px solid var(--border); }
-
-        .journal-entry { border: 1px solid var(--border); border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
-        .entry-header { background: var(--accent); padding: 10px; font-size: 0.75rem; display: flex; justify-content: space-between; font-weight: 600; }
-
-        .right { text-align: right; }
-        .mono { font-family: 'DM Mono', monospace; }
-        .text-success { color: var(--success); }
-        .text-danger { color: var(--danger); }
-        
-        .page { display: none; }
-        .page.active { display: block; }
-        .signature { margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.7rem; color: var(--text-muted); }
-        .signature b { color: white; display: block; margin-top: 4px; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar-active { background-color: #1e293b; border-left: 4px solid #3b82f6; color: white; }
+        canvas { max-height: 250px; }
     </style>
 </head>
-<body>
+<body class="bg-[#f8fafc] flex h-screen overflow-hidden">
 
-    <div class="sidebar">
-        <h1>ComptaDigital</h1>
-        <div class="nav-container">
-            <div class="nav-item active" onclick="showPage('saisie', this)">Journal</div>
-            <div class="nav-item" onclick="showPage('stats', this); renderCharts();">Analyses</div>
-            <div class="nav-item" onclick="showPage('bilan-page', this)">Bilan</div>
-            <div class="nav-item" onclick="showPage('save', this)">Options</div>
+    <!-- Barre latérale (Sidebar) -->
+    <aside class="w-64 bg-[#0f172a] text-gray-400 flex flex-col flex-shrink-0">
+        <div class="p-6">
+            <h1 class="text-blue-500 font-bold text-lg tracking-widest italic">COMPTADIGITAL</h1>
+            <p class="text-[10px] text-gray-500 mt-1 uppercase tracking-tighter">Outil de gestion comptable</p>
         </div>
-        <div class="signature">Développé par <b>BALSAME HAMMIOUI</b></div>
-    </div>
 
-    <div class="main-content">
-        <div id="saisie" class="page active">
-            <div class="kpi-grid">
-                <div class="kpi-card"><div class="kpi-label">CA (HT)</div><div id="kpi-ca" class="kpi-value">0 MAD</div></div>
-                <div class="kpi-card"><div class="kpi-label">Charges</div><div id="kpi-charges" class="kpi-value">0 MAD</div></div>
-                <div class="kpi-card"><div class="kpi-label">Résultat</div><div id="kpi-resultat" class="kpi-value">0 MAD</div></div>
-                <div class="kpi-card"><div class="kpi-label">Opér.</div><div id="kpi-nb" class="kpi-value">0</div></div>
+        <nav class="flex-1 px-4 space-y-7 mt-4">
+            <!-- Section Saisie -->
+            <div>
+                <p class="text-[10px] uppercase font-bold text-gray-600 mb-3 px-2 tracking-widest">Saisie</p>
+                <a href="#" class="block py-2 px-2 text-sm hover:text-white transition-colors">Journal Comptable</a>
             </div>
 
-            <div class="card">
-                <div class="title">Nouvelle Écriture</div>
-                <div class="form-grid">
-                    <div><label>Type</label><select id="type">
-                        <option value="vente">Vente (7111)</option>
-                        <option value="achat">Achat (6111)</option>
-                        <option value="service">Services (6141)</option>
-                        <option value="salaire">Salaires (6171)</option>
-                    </select></div>
-                    <div><label>Montant HT</label><input type="number" id="ht" placeholder="0.00"></div>
-                    <div><label>Référence</label><input type="text" id="libelle" placeholder="Ex: FAC-101"></div>
-                    <div><label>Mode de Règlement</label><select id="reglement">
-                        <option value="5141">Banque</option>
-                        <option value="5161">Caisse</option>
-                        <option value="3421">Client (Crédit)</option>
-                        <option value="4411">Fournisseur (Crédit)</option>
-                    </select></div>
+            <!-- Section Analyse -->
+            <div>
+                <p class="text-[10px] uppercase font-bold text-gray-600 mb-3 px-2 tracking-widest">Analyse</p>
+                <a href="#" class="block py-2 px-2 text-sm sidebar-active rounded-r">Tableau de bord</a>
+                <a href="#" class="block py-2 px-2 mt-2 text-sm hover:text-white transition-colors">Bilan Simplifié</a>
+            </div>
+
+            <!-- Section Référence -->
+            <div>
+                <p class="text-[10px] uppercase font-bold text-gray-600 mb-3 px-2 tracking-widest">Référence</p>
+                <a href="#" class="block py-2 px-2 text-sm hover:text-white transition-colors">Plan Comptable</a>
+                <a href="#" class="block py-2 px-2 mt-2 text-sm hover:text-white transition-colors">Sauvegarde / Export</a>
+            </div>
+        </nav>
+
+        <!-- Footer Sidebar -->
+        <div class="p-6 text-[10px] border-t border-gray-800/50">
+            <p class="text-gray-500">Développé par</p>
+            <p class="text-white font-semibold uppercase tracking-wide">Balsame Hammioui</p>
+        </div>
+    </aside>
+
+    <!-- Contenu Principal -->
+    <main class="flex-1 overflow-y-auto p-8">
+        <!-- En-tête -->
+        <header class="flex justify-between items-center mb-10">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">Tableau de Bord</h2>
+                <p class="text-sm text-gray-500">Vue d'ensemble financière de vos opérations</p>
+            </div>
+            <button class="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-lg text-xs font-medium shadow-sm hover:bg-gray-50 transition-all">
+                Mode clair / sombre
+            </button>
+        </header>
+
+        <!-- Grille des indicateurs (KPIs) -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-10">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-tight">Chiffre d'affaires</p>
+                <p class="text-2xl font-bold text-gray-800">0 <span class="text-sm font-semibold text-green-600 uppercase">mad</span></p>
+                <p class="text-[10px] text-gray-400 mt-1">Total ventes HT</p>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-tight">Total Charges</p>
+                <p class="text-2xl font-bold text-gray-800">0 <span class="text-sm font-semibold text-red-600 uppercase">mad</span></p>
+                <p class="text-[10px] text-gray-400 mt-1">Achats + services + personnel</p>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-tight">Résultat Net</p>
+                <p class="text-2xl font-bold text-gray-800">0 <span class="text-sm font-semibold text-gray-500 uppercase">mad</span></p>
+                <p class="text-[10px] text-gray-400 mt-1">CA - Total charges</p>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-tight">TVA Collectée</p>
+                <p class="text-2xl font-bold text-gray-800">0 <span class="text-sm font-semibold text-orange-600 uppercase">mad</span></p>
+                <p class="text-[10px] text-gray-400 mt-1">À reverser à l'État</p>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-tight">Nb d'écritures</p>
+                <p class="text-2xl font-bold text-blue-600">0</p>
+                <p class="text-[10px] text-gray-400 mt-1">Opérations enregistrées</p>
+            </div>
+        </div>
+
+        <!-- Section des Graphiques -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Graphique à barres -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-[11px] uppercase font-bold text-gray-500 mb-8 tracking-widest">Répartition des charges vs produits</p>
+                <div class="h-64 w-full">
+                    <canvas id="barChart"></canvas>
                 </div>
-                <button class="btn-submit" onclick="ajouterEcriture()">Enregistrer au Journal</button>
             </div>
-            <div id="journal-output"></div>
-        </div>
 
-        <div id="stats" class="page">
-            <div class="card"><div class="title">Répartition des flux</div><div class="chart-container" style="height:300px"><canvas id="chartDoughnut"></canvas></div></div>
-        </div>
-
-        <div id="bilan-page" class="page">
-            <div class="card">
-                <div class="title">Bilan Simplifié</div>
-                <div class="table-wrapper">
-                    <table>
-                        <tr style="background:var(--accent)"><th>ACTIF</th><th class="right">MAD</th><th>PASSIF</th><th class="right">MAD</th></tr>
-                        <tr><td>Trésorerie</td><td id="b-tresorerie" class="right mono">0</td><td>Résultat</td><td id="b-resultat-passif" class="right mono">0</td></tr>
-                        <tr><td>Créances Clients</td><td id="b-clients" class="right mono">0</td><td>Dettes Fourn.</td><td id="b-fournisseurs" class="right mono">0</td></tr>
-                        <tr style="font-weight:700"><td>TOTAL ACTIF</td><td id="b-total-actif" class="right mono">0</td><td>TOTAL PASSIF</td><td id="b-total-passif" class="right mono">0</td></tr>
-                    </table>
+            <!-- Graphique linéaire -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-[11px] uppercase font-bold text-gray-500 mb-8 tracking-widest">Évolution par opération</p>
+                <div class="h-64 w-full">
+                    <canvas id="lineChart"></canvas>
                 </div>
             </div>
         </div>
+    </main>
 
-        <div id="save" class="page">
-            <div class="card">
-                <button class="btn-submit" onclick="window.print()">Exporter PDF</button>
-                <button class="btn-submit" style="background:#64748b" onclick="saveLocal()">Sauvegarder Session</button>
-                <button class="btn-submit" style="background:var(--danger)" onclick="ecritures=[]; updateAll(); renderJournal();">Reset</button>
-            </div>
-        </div>
-    </div>
+    <script>
+        // --- GRAPHIQUE BARRES (Charges vs Produits) ---
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+                datasets: [
+                    { label: 'Produits (CA)', data: [15000, 22000, 18000, 25000, 19000, 30000], backgroundColor: '#16a34a', borderRadius: 4 },
+                    { label: 'Achats', data: [8000, 12000, 9000, 11000, 10000, 14000], backgroundColor: '#dc2626', borderRadius: 4 },
+                    { label: 'Charges ext.', data: [3000, 4000, 3500, 4500, 4000, 5000], backgroundColor: '#f97316', borderRadius: 4 },
+                    { label: 'Personnel', data: [5000, 5000, 5000, 5000, 5000, 5000], backgroundColor: '#1d4ed8', borderRadius: 4 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 10, padding: 20, font: { size: 10, weight: '600' } } }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, border: { display: false } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
 
-<script>
-let ecritures = [];
-let chartDoughnut;
-
-function showPage(p, el) {
-    document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
-    document.getElementById(p).classList.add('active');
-    el.classList.add('active');
-}
-
-function ajouterEcriture() {
-    const ht = parseFloat(document.getElementById('ht').value);
-    const type = document.getElementById('type').value;
-    if(!ht) return alert("Saisissez un montant");
-
-    const e = {
-        date: new Date().toLocaleDateString('fr-FR'),
-        type, ht, libelle: document.getElementById('libelle').value || "REF",
-        reglement: document.getElementById('reglement').value,
-        isCharge: type !== 'vente'
-    };
-    ecritures.push(e);
-    updateAll();
-    renderJournal();
-}
-
-function renderJournal() {
-    const out = document.getElementById('journal-output');
-    out.innerHTML = [...ecritures].reverse().map(e => `
-        <div class="journal-entry">
-            <div class="entry-header"><span>${e.libelle}</span><span>${e.date}</span></div>
-            <div style="padding:10px">Type: ${e.type.toUpperCase()} | Montant: <span class="mono">${e.ht} MAD</span></div>
-        </div>
-    `).join('');
-}
-
-function updateAll() {
-    let ca = 0, charges = 0;
-    ecritures.forEach(e => { if(e.isCharge) charges += e.ht; else ca += e.ht; });
-    document.getElementById('kpi-ca').textContent = ca + " MAD";
-    document.getElementById('kpi-charges').textContent = charges + " MAD";
-    document.getElementById('kpi-resultat').textContent = (ca - charges) + " MAD";
-    document.getElementById('kpi-nb').textContent = ecritures.length;
-}
-
-function renderCharts() {
-    const ctx = document.getElementById('chartDoughnut').getContext('2d');
-    if(chartDoughnut) chartDoughnut.destroy();
-    chartDoughnut = new Chart(ctx, {
-        type: 'doughnut',
-        data: { labels: ['Ventes', 'Charges'], datasets: [{ data: [100, 50], backgroundColor: ['#10b981', '#ef4444'] }] }
-    });
-}
-
-function saveLocal() { localStorage.setItem('cd_balsame', JSON.stringify(ecritures)); alert("Sauvé !"); }
-</script>
+        // --- GRAPHIQUE LIGNES (Évolution) ---
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['Op 1', 'Op 2', 'Op 3', 'Op 4', 'Op 5', 'Op 6'],
+                datasets: [{
+                    label: 'Performance',
+                    data: [0.2, 0.5, 0.4, 0.9, 0.6, 0.8],
+                    borderColor: '#94a3b8',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: false,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { 
+                    y: { 
+                        min: 0, max: 1, 
+                        ticks: { stepSize: 0.2, color: '#94a3b8' }, 
+                        grid: { color: '#f1f5f9' },
+                        border: { display: false }
+                    },
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
