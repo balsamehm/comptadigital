@@ -4,18 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ComptaDigital | Saisie Journal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=DM+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-sidebar: #0a0e1a;
             --bg-main: #f0f4f9;
+            --card-bg: #ffffff;
             --primary: #2b61e5;
             --text-dark: #1e293b;
-            --text-light: #ffffff;
+            --text-muted: #94a3b8;
             --border: #e2e8f0;
+            --input-bg: #f8fafc;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        [data-theme="dark"] {
+            --bg-main: #020617;
+            --card-bg: #0f172a;
+            --text-dark: #f1f5f9;
+            --border: #1e293b;
+            --input-bg: #1e293b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -32,7 +42,7 @@
             display: flex;
             flex-direction: column;
             padding: 40px 20px;
-            color: var(--text-light);
+            color: #ffffff;
             flex-shrink: 0;
         }
 
@@ -53,17 +63,14 @@
             cursor: pointer;
             font-size: 0.85rem;
             color: #94a3b8;
-            transition: 0.3s;
         }
 
-        .nav-item:hover { color: white; }
         .nav-item.active { background: var(--primary); color: white; font-weight: 600; }
 
         .sidebar-footer {
             margin-top: auto;
             font-size: 0.7rem;
             color: #475569;
-            line-height: 1.4;
         }
 
         /* MAIN CONTENT */
@@ -71,7 +78,6 @@
             flex: 1;
             padding: 40px;
             overflow-y: auto;
-            position: relative;
         }
 
         .header-top {
@@ -81,21 +87,23 @@
         }
 
         .btn-mode {
-            background: white;
+            background: var(--card-bg);
             border: 1px solid var(--border);
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.75rem;
             cursor: pointer;
+            color: var(--text-dark);
+            font-weight: 600;
         }
 
         .card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.02);
             padding: 30px;
             margin-bottom: 30px;
-            border: 1px solid #eef2f6;
+            border: 1px solid var(--border);
         }
 
         .section-title {
@@ -104,7 +112,6 @@
             font-size: 0.85rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             margin-bottom: 25px;
         }
 
@@ -117,7 +124,7 @@
             border-radius: 2px;
         }
 
-        /* GRID FORM */
+        /* FORM */
         .form-grid {
             display: grid;
             grid-template-columns: 1.5fr 1fr 1fr 1fr;
@@ -129,7 +136,7 @@
             display: block;
             font-size: 0.65rem;
             font-weight: 600;
-            color: #94a3b8;
+            color: var(--text-muted);
             margin-bottom: 8px;
             text-transform: uppercase;
         }
@@ -137,11 +144,12 @@
         select, input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #e2e8f0;
-            background: #f8fafc;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
             border-radius: 8px;
             font-size: 0.85rem;
             color: var(--text-dark);
+            outline: none;
         }
 
         .btn-save {
@@ -152,39 +160,40 @@
             padding: 14px;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 0.9rem;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        .btn-save:hover { background: #1e4fd1; }
-
-        .empty-state {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-top: 10px;
+        /* HISTORIQUE */
+        .entry-row {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr 1fr 1fr;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            align-items: center;
         }
 
-        /* --- CORRECTIF MOBILE --- */
+        .entry-row:last-child { border-bottom: none; }
+        .amount { font-family: 'DM Mono', monospace; font-weight: 600; }
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-achat { background: #fee2e2; color: #ef4444; }
+        .badge-vente { background: #dcfce7; color: #10b981; }
+
         @media (max-width: 850px) {
             body { flex-direction: column; height: auto; }
-            .sidebar { 
-                width: 100%; 
-                padding: 15px; 
-                height: auto; 
-                position: sticky; 
-                top: 0; 
-                z-index: 100;
-            }
-            .logo { display: none; }
-            .nav-container { display: flex; overflow-x: auto; gap: 10px; scrollbar-width: none; }
-            .nav-container::-webkit-scrollbar { display: none; }
+            .sidebar { width: 100%; padding: 15px; height: auto; position: sticky; top: 0; z-index: 100; }
+            .logo, .sidebar-footer { display: none; }
+            .nav-container { display: flex; overflow-x: auto; gap: 10px; }
             .nav-item { margin-bottom: 0; white-space: nowrap; padding: 8px 15px; font-size: 0.75rem; }
-            .sidebar-footer { display: none; }
-            
             .main-content { padding: 20px; }
-            .form-grid { grid-template-columns: 1fr; }
-            .header-top { display: none; }
+            .form-grid, .entry-row { grid-template-columns: 1fr; gap: 10px; }
+            .entry-row { padding: 20px 0; }
         }
     </style>
 </head>
@@ -206,7 +215,7 @@
 
     <div class="main-content">
         <div class="header-top">
-            <button class="btn-mode">Changer de mode</button>
+            <button class="btn-mode" onclick="toggleTheme()">Changer de mode</button>
         </div>
 
         <div class="card">
@@ -214,37 +223,85 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label>Nature</label>
-                    <select>
-                        <option>Achat (6111)</option>
-                        <option>Vente (7111)</option>
-                        <option>Service (6141)</option>
+                    <select id="nature">
+                        <option value="Achat (6111)">Achat (6111)</option>
+                        <option value="Vente (7111)">Vente (7111)</option>
+                        <option value="Service (6141)">Service (6141)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Montant HT (MAD)</label>
-                    <input type="number" placeholder="0.00">
+                    <input type="number" id="montant" placeholder="0.00">
                 </div>
                 <div class="form-group">
                     <label>Référence</label>
-                    <input type="text" placeholder="REF001">
+                    <input type="text" id="ref" placeholder="REF001">
                 </div>
                 <div class="form-group">
                     <label>Règlement</label>
-                    <select>
+                    <select id="reglement">
                         <option>Crédit</option>
                         <option>Banque</option>
                         <option>Caisse</option>
                     </select>
                 </div>
             </div>
-            <button class="btn-save">Enregistrer au Journal</button>
+            <button class="btn-save" onclick="ajouterEcriture()">Enregistrer au Journal</button>
         </div>
 
         <div class="card">
             <div class="section-title">Historique des écritures</div>
-            <div class="empty-state">Aucune écriture enregistrée.</div>
+            <div id="historique-list">
+                <div class="empty-state" style="color: #94a3b8; font-size: 0.9rem;">Aucune écriture enregistrée.</div>
+            </div>
         </div>
     </div>
 
+    <script>
+        let ecritures = [];
+
+        function toggleTheme() {
+            const body = document.body;
+            body.dataset.theme = body.dataset.theme === "dark" ? "light" : "dark";
+        }
+
+        function ajouterEcriture() {
+            const nature = document.getElementById('nature').value;
+            const montant = document.getElementById('montant').value;
+            const ref = document.getElementById('ref').value || "SANS-REF";
+            const reglement = document.getElementById('reglement').value;
+
+            if (!montant || montant <= 0) {
+                alert("Veuillez saisir un montant valide.");
+                return;
+            }
+
+            const nouvelleEcriture = { nature, montant, ref, reglement, date: new Date().toLocaleDateString() };
+            ecritures.unshift(nouvelleEcriture); // Ajouter au début
+
+            // Reset des champs
+            document.getElementById('montant').value = "";
+            document.getElementById('ref').value = "";
+
+            renderJournal();
+        }
+
+        function renderJournal() {
+            const list = document.getElementById('historique-list');
+            if (ecritures.length === 0) {
+                list.innerHTML = '<div class="empty-state">Aucune écriture enregistrée.</div>';
+                return;
+            }
+
+            list.innerHTML = ecritures.map(e => `
+                <div class="entry-row">
+                    <div><span class="badge ${e.nature.includes('Vente') ? 'badge-vente' : 'badge-achat'}">${e.nature}</span></div>
+                    <div style="font-weight: 600;">${e.ref}</div>
+                    <div class="amount">${parseFloat(e.montant).toLocaleString()} MAD</div>
+                    <div style="color: var(--text-muted); font-size: 0.75rem;">via ${e.reglement}</div>
+                </div>
+            `).join('');
+        }
+    </script>
 </body>
 </html>
