@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* VARIABLES DE COULEURS ET THÈMES */
         :root {
             --bg-body: #f8fafc;
             --bg-sidebar: #0f172a;
@@ -32,7 +31,6 @@
             --accent: #1e293b;
         }
 
-        /* STRUCTURE GÉNÉRALE */
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -54,7 +52,6 @@
             padding: 40px 20px;
             border-right: 1px solid var(--border);
             flex-shrink: 0;
-            transition: 0.3s;
         }
 
         .sidebar h1 {
@@ -91,7 +88,6 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        /* SIGNATURE */
         .signature {
             margin-top: auto;
             padding-top: 20px;
@@ -99,7 +95,6 @@
             font-size: 0.65rem;
             color: #64748b;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .signature span {
@@ -107,10 +102,9 @@
             color: #f1f5f9;
             font-weight: 700;
             margin-top: 5px;
-            font-size: 0.75rem;
         }
 
-        /* CONTENU PRINCIPAL */
+        /* CONTENU */
         .main-content {
             flex: 1;
             padding: 40px 60px;
@@ -134,8 +128,6 @@
             cursor: pointer;
             font-size: 0.75rem;
             font-weight: 600;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: 0.2s;
         }
 
         .card {
@@ -151,9 +143,7 @@
             font-size: 0.9rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
             margin-bottom: 25px;
-            color: var(--text-main);
             display: flex;
             align-items: center;
         }
@@ -167,11 +157,37 @@
             border-radius: 2px;
         }
 
+        /* NAVIGATION LOGIC */
+        .page {
+            display: none; /* Cache par défaut */
+        }
+
+        .page.active {
+            display: block !important; /* Affiche si actif */
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FORM & TABLES */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 25px;
             margin-bottom: 20px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-body);
+            color: var(--text-main);
+            box-sizing: border-box;
         }
 
         label {
@@ -183,18 +199,6 @@
             margin-bottom: 10px;
         }
 
-        input, select {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            background: var(--bg-body);
-            color: var(--text-main);
-            font-family: inherit;
-            font-size: 0.9rem;
-            box-sizing: border-box;
-        }
-
         .btn-submit {
             background: var(--primary);
             color: white;
@@ -203,68 +207,30 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
-            font-size: 0.9rem;
             width: 100%;
-            transition: 0.3s;
-        }
-
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-item {
-            padding: 25px;
-            border-radius: 12px;
-            background: var(--bg-body);
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .stat-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
-        .stat-value { font-size: 1.5rem; font-weight: 700; margin-top: 10px; }
-
-        .rentable-bar {
-            height: 12px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-
-        .rentable-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--primary);
-            transition: 1s;
         }
 
         .table-container { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 500px; }
-        th { text-align: left; padding: 15px; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.65rem; text-transform: uppercase; }
-        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; padding: 12px; border-bottom: 2px solid var(--border); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; }
+        td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        
         .val-debit { color: var(--success); font-weight: 700; text-align: right; }
         .val-credit { color: var(--danger); font-weight: 700; text-align: right; }
 
-        .page { display: none; }
-        .page.active { display: block; animation: fadeInUp 0.4s ease forwards; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .stat-item { padding: 25px; border-radius: 12px; background: var(--bg-body); border: 1px solid var(--border); text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; margin-top: 10px; }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .rentable-bar { height: 12px; background: #e2e8f0; border-radius: 10px; margin-top: 20px; overflow: hidden; }
+        .rentable-fill { height: 100%; width: 0%; background: var(--primary); transition: 1s; }
 
-        /* RESPONSIVE */
         @media (max-width: 850px) {
             body { flex-direction: column; overflow-y: auto; height: auto; }
-            .sidebar { width: 100%; padding: 20px; height: auto; position: sticky; top: 0; border-right: none; border-bottom: 1px solid var(--border); }
-            .sidebar h1 { margin-bottom: 15px; font-size: 0.8rem; border: none; padding: 0; }
-            .nav-container { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 5px; }
-            .nav-item { margin-bottom: 0; white-space: nowrap; padding: 10px 15px; font-size: 0.75rem; }
-            .signature { display: none; }
-            .main-content { padding: 25px; margin-left: 0; width: 100%; box-sizing: border-box; }
-            .stat-grid { grid-template-columns: 1fr 1fr; }
+            .sidebar { width: 100%; padding: 20px; height: auto; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
+            .nav-container { display: flex; overflow-x: auto; gap: 10px; }
+            .nav-item { white-space: nowrap; margin-bottom: 0; }
+            .main-content { padding: 20px; }
         }
     </style>
 </head>
@@ -286,6 +252,7 @@
             <button class="theme-btn" onclick="toggleTheme()">Mode Sombre / Clair</button>
         </div>
 
+        <!-- PAGE SAISIE -->
         <div id="saisie" class="page active">
             <div class="card">
                 <div class="title">Nouvelle Ecriture Comptable</div>
@@ -326,6 +293,7 @@
             </div>
         </div>
 
+        <!-- PAGE PLAN COMPTABLE -->
         <div id="pcm" class="page">
             <div class="card">
                 <div class="title">Plan Comptable Marocain</div>
@@ -337,15 +305,18 @@
                         <tbody>
                             <tr><td>1111</td><td>Capital Social</td><td>Financement</td></tr>
                             <tr><td>3421</td><td>Clients</td><td>Actif</td></tr>
+                            <tr><td>3455</td><td>État TVA Récupérable</td><td>Actif</td></tr>
                             <tr><td>4411</td><td>Fournisseurs</td><td>Passif</td></tr>
-                            <tr><td>6111</td><td>Achats</td><td>Charges</td></tr>
-                            <tr><td>7111</td><td>Ventes</td><td>Produits</td></tr>
+                            <tr><td>4455</td><td>État TVA Facturée</td><td>Passif</td></tr>
+                            <tr><td>6111</td><td>Achats de Marchandises</td><td>Charges</td></tr>
+                            <tr><td>7111</td><td>Ventes de Marchandises</td><td>Produits</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
+        <!-- PAGE STATS -->
         <div id="stats" class="page">
             <div class="card">
                 <div class="title">Analyse Financiere</div>
@@ -373,12 +344,14 @@
             </div>
         </div>
 
+        <!-- PAGE SAVE -->
         <div id="save" class="page">
             <div class="card">
                 <div class="title">Gestion des Donnees</div>
                 <div style="display: flex; gap: 15px; flex-direction: column;">
                     <button class="btn-submit" onclick="saveLocal()">Sauvegarder la session</button>
                     <button class="btn-submit" style="background:#64748b" onclick="loadLocal()">Restaurer la sauvegarde</button>
+                    <button class="btn-submit" style="background:var(--danger)" onclick="clearData()">Réinitialiser tout</button>
                 </div>
             </div>
         </div>
@@ -386,55 +359,92 @@
 
     <script>
         let charges = 0, produits = 0;
+
+        // SYSTÈME DE NAVIGATION (CORRIGÉ)
+        function showPage(pageId, element) {
+            // Masquer toutes les pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Désactiver tous les liens nav
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Activer la page et le bouton sélectionnés
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.add('active');
+                element.classList.add('active');
+            }
+        }
+
         function toggleTheme() {
             const b = document.body;
             b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
         }
-        function showPage(p, el) {
-            document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
-            document.getElementById(p).classList.add('active');
-            el.classList.add('active');
-        }
+
         function ajouterAuJournal() {
-            const ht = parseFloat(document.getElementById('ht').value);
+            const htInput = document.getElementById('ht');
+            const ht = parseFloat(htInput.value);
             const code = document.getElementById('type').value;
             const lib = (document.getElementById('libelle').value || "SANS LIBELLE").toUpperCase();
             const reg = document.getElementById('reglement').value;
-            if (isNaN(ht) || ht <= 0) return alert("Montant invalide");
-            const tva = ht * 0.20; const ttc = ht + tva;
+
+            if (isNaN(ht) || ht <= 0) return alert("Montant HT invalide");
+
+            const tva = ht * 0.20; 
+            const ttc = ht + tva;
+            
+            // Logique TVA : 3455 pour Achats (Classe 6), 4455 pour Ventes (Classe 7)
+            const codeTva = code.startsWith('6') ? "3455" : "4455";
+            const labelTva = code.startsWith('6') ? "TVA Récup." : "TVA Facturée";
+
             if (code.startsWith('6')) charges += ht; else produits += ht;
+            
             updateUI();
+
             const entry = `
             <table style="margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
                 <thead><tr style="background: var(--accent);"><th colspan="2">REF: ${lib}</th><th style="text-align:right">DEBIT</th><th style="text-align:right">CREDIT</th></tr></thead>
                 <tbody>
-                    <tr><td>${code}</td><td>Principal HT</td><td class="val-debit">${ht.toFixed(2)}</td><td></td></tr>
-                    <tr><td>3455</td><td>TVA Recup.</td><td class="val-debit">${tva.toFixed(2)}</td><td></td></tr>
-                    <tr><td>${reg}</td><td>Contrepartie</td><td></td><td class="val-credit">${ttc.toFixed(2)}</td></tr>
+                    <tr><td>${code}</td><td>Principal HT</td><td class="val-debit">${code.startsWith('6') ? ht.toFixed(2) : ""}</td><td class="val-credit">${code.startsWith('7') ? ht.toFixed(2) : ""}</td></tr>
+                    <tr><td>${codeTva}</td><td>${labelTva}</td><td class="val-debit">${code.startsWith('6') ? tva.toFixed(2) : ""}</td><td class="val-credit">${code.startsWith('7') ? tva.toFixed(2) : ""}</td></tr>
+                    <tr><td>${reg}</td><td>Règlement</td><td class="val-debit">${code.startsWith('7') ? ttc.toFixed(2) : ""}</td><td class="val-credit">${code.startsWith('6') ? ttc.toFixed(2) : ""}</td></tr>
                 </tbody>
             </table>`;
+
             const out = document.getElementById('journal-output');
             if (out.innerHTML.includes("Aucune")) out.innerHTML = "";
             out.innerHTML = entry + out.innerHTML;
-            document.getElementById('ht').value = ""; document.getElementById('libelle').value = "";
+
+            // Reset
+            htInput.value = ""; 
+            document.getElementById('libelle').value = "";
         }
+
         function updateUI() {
             const res = produits - charges;
             document.getElementById('totalCharges').innerText = charges.toFixed(2) + " MAD";
             document.getElementById('totalProduits').innerText = produits.toFixed(2) + " MAD";
+            
             const rEl = document.getElementById('resultatNet');
             rEl.innerText = res.toFixed(2) + " MAD";
             rEl.style.color = res >= 0 ? "var(--success)" : "var(--danger)";
+            
             const ratio = charges > 0 ? Math.min((produits / charges) * 100, 100) : 0;
             document.getElementById('rentableFill').style.width = ratio + "%";
-            document.getElementById('rentableMsg').innerText = ratio >= 100 ? "Bénéfice atteint" : "Couverture : " + Math.round(ratio) + "%";
+            document.getElementById('rentableMsg').innerText = ratio >= 100 ? "Bénéfice atteint !" : "Couverture des charges : " + Math.round(ratio) + "%";
         }
+
         function saveLocal() {
             localStorage.setItem('j_dat', document.getElementById('journal-output').innerHTML);
-            localStorage.setItem('c_dat', charges); localStorage.setItem('p_dat', produits);
-            alert("Session sauvegardée");
+            localStorage.setItem('c_dat', charges); 
+            localStorage.setItem('p_dat', produits);
+            alert("Session sauvegardée avec succès");
         }
+
         function loadLocal() {
             const j = localStorage.getItem('j_dat');
             if (j) {
@@ -443,6 +453,15 @@
                 produits = parseFloat(localStorage.getItem('p_dat')) || 0;
                 updateUI();
                 alert("Données restaurées");
+            } else {
+                alert("Aucune sauvegarde trouvée");
+            }
+        }
+
+        function clearData() {
+            if(confirm("Voulez-vous vraiment tout supprimer ?")) {
+                localStorage.clear();
+                location.reload();
             }
         }
     </script>
