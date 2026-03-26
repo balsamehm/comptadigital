@@ -3,177 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ComptaDigital - Tableau de Bord</title>
-    <!-- Tailwind CSS pour le style rapide -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js pour les graphiques interactifs -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>ComptaDigital | Saisie Journal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .sidebar-active { background-color: #1e293b; border-left: 4px solid #3b82f6; color: white; }
-        canvas { max-height: 250px; }
+        :root {
+            --bg-sidebar: #0a0e1a;
+            --bg-main: #f0f4f9;
+            --primary: #2b61e5;
+            --text-dark: #1e293b;
+            --text-light: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            height: 100vh;
+            background: var(--bg-main);
+            color: var(--text-dark);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-sidebar);
+            display: flex;
+            flex-direction: column;
+            padding: 40px 20px;
+            color: var(--text-light);
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            transition: 0.3s;
+        }
+
+        .nav-item:hover { color: white; }
+        .nav-item.active { background: var(--primary); color: white; font-weight: 600; }
+
+        .sidebar-footer {
+            margin-top: auto;
+            font-size: 0.7rem;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+        }
+
+        .btn-mode {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #eef2f6;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 25px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: var(--primary);
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+
+        /* GRID FORM */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+        }
+
+        .btn-save {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-save:hover { background: #1e4fd1; }
+
+        .empty-state {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* --- CORRECTIF MOBILE --- */
+        @media (max-width: 850px) {
+            body { flex-direction: column; height: auto; }
+            .sidebar { 
+                width: 100%; 
+                padding: 15px; 
+                height: auto; 
+                position: sticky; 
+                top: 0; 
+                z-index: 100;
+            }
+            .logo { display: none; }
+            .nav-container { display: flex; overflow-x: auto; gap: 10px; scrollbar-width: none; }
+            .nav-container::-webkit-scrollbar { display: none; }
+            .nav-item { margin-bottom: 0; white-space: nowrap; padding: 8px 15px; font-size: 0.75rem; }
+            .sidebar-footer { display: none; }
+            
+            .main-content { padding: 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .header-top { display: none; }
+        }
     </style>
 </head>
-<body class="bg-[#f8fafc] flex h-screen overflow-hidden">
+<body>
 
-    <!-- Barre latérale (Sidebar) -->
-    <aside class="w-64 bg-[#0f172a] text-gray-400 flex flex-col flex-shrink-0">
-        <div class="p-6">
-            <h1 class="text-blue-500 font-bold text-lg tracking-widest italic">COMPTADIGITAL</h1>
-            <p class="text-[10px] text-gray-500 mt-1 uppercase tracking-tighter">Outil de gestion comptable</p>
+    <div class="sidebar">
+        <div class="logo">COMPTADIGITAL</div>
+        <div class="nav-container">
+            <div class="nav-item active">Saisie Journal</div>
+            <div class="nav-item">Plan Comptable</div>
+            <div class="nav-item">Statistiques</div>
+            <div class="nav-item">Sauvegarde</div>
+        </div>
+        <div class="sidebar-footer">
+            Développé par<br>
+            <strong>BALSAME HAMMIOUI</strong>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header-top">
+            <button class="btn-mode">Changer de mode</button>
         </div>
 
-        <nav class="flex-1 px-4 space-y-7 mt-4">
-            <!-- Section Saisie -->
-            <div>
-                <p class="text-[10px] uppercase font-bold text-gray-600 mb-3 px-2 tracking-widest">Saisie</p>
-                <a href="#" class="block py-2 px-2 text-sm hover:text-white transition-colors">Journal Comptable</a>
-            </div>
-
-            <!-- Section Analyse -->
-            <div>
-                <p class="text-[10px] uppercase font-bold text-gray-600 mb-3 px-2 tracking-widest">Analyse</p>
-                <a href="#" class="block py-2 px-2 text-sm sidebar-active rounded-r">Tableau de bord</a>
-                <a href="#" class="block py-2 px-2 mt-2 text-sm hover:text-white transition-colors">Bilan Simplifié</a>
-            </div>
-
-            <!-- Section Référence -->
-            <div>
-                <p class="text-[10px] uppercase font-bold text-gray-600 mb-3 px-2 tracking-widest">Référence</p>
-                <a href="#" class="block py-2 px-2 text-sm hover:text-white transition-colors">Plan Comptable</a>
-                <a href="#" class="block py-2 px-2 mt-2 text-sm hover:text-white transition-colors">Sauvegarde / Export</a>
-            </div>
-        </nav>
-
-        <!-- Footer Sidebar -->
-        <div class="p-6 text-[10px] border-t border-gray-800/50">
-            <p class="text-gray-500">Développé par</p>
-            <p class="text-white font-semibold uppercase tracking-wide">Balsame Hammioui</p>
-        </div>
-    </aside>
-
-    <!-- Contenu Principal -->
-    <main class="flex-1 overflow-y-auto p-8">
-        <!-- En-tête -->
-        <header class="flex justify-between items-center mb-10">
-            <div>
-                <h2 class="text-2xl font-bold text-gray-800">Tableau de Bord</h2>
-                <p class="text-sm text-gray-500">Vue d'ensemble financière de vos opérations</p>
-            </div>
-            <button class="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-lg text-xs font-medium shadow-sm hover:bg-gray-50 transition-all">
-                Mode clair / sombre
-            </button>
-        </header>
-
-        <!-- Grille des indicateurs (KPIs) -->
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-10">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-tight">Chiffre d'affaires</p>
-                <p class="text-2xl font-bold text-gray-800">0 <span class="text-sm font-semibold text-green-600 uppercase">mad</span></p>
-                <p class="text-[10px] text-gray-400 mt-1">Total ventes HT</p>
-            </div>
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-tight">Total Charges</p>
-                <p class="text-2xl font-bold text-gray-800">0 <span class="text-sm font-semibold text-red-600 uppercase">mad</span></p>
-                <p class="text-[10px] text-gray-400 mt-1">Achats + services + personnel</p>
-            </div>
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-tight">Résultat Net</p>
-                <p class="text-2xl font-bold text-gray-800">0 <span class="text-sm font-semibold text-gray-500 uppercase">mad</span></p>
-                <p class="text-[10px] text-gray-400 mt-1">CA - Total charges</p>
-            </div>
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-tight">TVA Collectée</p>
-                <p class="text-2xl font-bold text-gray-800">0 <span class="text-sm font-semibold text-orange-600 uppercase">mad</span></p>
-                <p class="text-[10px] text-gray-400 mt-1">À reverser à l'État</p>
-            </div>
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-[10px] uppercase font-bold text-gray-400 mb-1 tracking-tight">Nb d'écritures</p>
-                <p class="text-2xl font-bold text-blue-600">0</p>
-                <p class="text-[10px] text-gray-400 mt-1">Opérations enregistrées</p>
-            </div>
-        </div>
-
-        <!-- Section des Graphiques -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Graphique à barres -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-[11px] uppercase font-bold text-gray-500 mb-8 tracking-widest">Répartition des charges vs produits</p>
-                <div class="h-64 w-full">
-                    <canvas id="barChart"></canvas>
+        <div class="card">
+            <div class="section-title">Nouvelle opération</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nature</label>
+                    <select>
+                        <option>Achat (6111)</option>
+                        <option>Vente (7111)</option>
+                        <option>Service (6141)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Montant HT (MAD)</label>
+                    <input type="number" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label>Référence</label>
+                    <input type="text" placeholder="REF001">
+                </div>
+                <div class="form-group">
+                    <label>Règlement</label>
+                    <select>
+                        <option>Crédit</option>
+                        <option>Banque</option>
+                        <option>Caisse</option>
+                    </select>
                 </div>
             </div>
-
-            <!-- Graphique linéaire -->
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-[11px] uppercase font-bold text-gray-500 mb-8 tracking-widest">Évolution par opération</p>
-                <div class="h-64 w-full">
-                    <canvas id="lineChart"></canvas>
-                </div>
-            </div>
+            <button class="btn-save">Enregistrer au Journal</button>
         </div>
-    </main>
 
-    <script>
-        // --- GRAPHIQUE BARRES (Charges vs Produits) ---
-        const ctxBar = document.getElementById('barChart').getContext('2d');
-        new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
-                datasets: [
-                    { label: 'Produits (CA)', data: [15000, 22000, 18000, 25000, 19000, 30000], backgroundColor: '#16a34a', borderRadius: 4 },
-                    { label: 'Achats', data: [8000, 12000, 9000, 11000, 10000, 14000], backgroundColor: '#dc2626', borderRadius: 4 },
-                    { label: 'Charges ext.', data: [3000, 4000, 3500, 4500, 4000, 5000], backgroundColor: '#f97316', borderRadius: 4 },
-                    { label: 'Personnel', data: [5000, 5000, 5000, 5000, 5000, 5000], backgroundColor: '#1d4ed8', borderRadius: 4 }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom', labels: { boxWidth: 10, padding: 20, font: { size: 10, weight: '600' } } }
-                },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, border: { display: false } },
-                    x: { grid: { display: false } }
-                }
-            }
-        });
+        <div class="card">
+            <div class="section-title">Historique des écritures</div>
+            <div class="empty-state">Aucune écriture enregistrée.</div>
+        </div>
+    </div>
 
-        // --- GRAPHIQUE LIGNES (Évolution) ---
-        const ctxLine = document.getElementById('lineChart').getContext('2d');
-        new Chart(ctxLine, {
-            type: 'line',
-            data: {
-                labels: ['Op 1', 'Op 2', 'Op 3', 'Op 4', 'Op 5', 'Op 6'],
-                datasets: [{
-                    label: 'Performance',
-                    data: [0.2, 0.5, 0.4, 0.9, 0.6, 0.8],
-                    borderColor: '#94a3b8',
-                    borderWidth: 3,
-                    tension: 0.4,
-                    fill: false,
-                    pointRadius: 0,
-                    pointHoverRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { 
-                    y: { 
-                        min: 0, max: 1, 
-                        ticks: { stepSize: 0.2, color: '#94a3b8' }, 
-                        grid: { color: '#f1f5f9' },
-                        border: { display: false }
-                    },
-                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
-                }
-            }
-        });
-    </script>
 </body>
 </html>
